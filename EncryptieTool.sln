@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptieTool", "EncryptieTool\EncryptieTool.csproj", "{3CC3B858-9AEE-4BC4-89A5-7CBFE8E21B77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeysLibrary", "KeysLibrary\KeysLibrary.csproj", "{AA336B9B-4EE4-422B-86BC-4F1F78B8B251}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3CC3B858-9AEE-4BC4-89A5-7CBFE8E21B77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CC3B858-9AEE-4BC4-89A5-7CBFE8E21B77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CC3B858-9AEE-4BC4-89A5-7CBFE8E21B77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CC3B858-9AEE-4BC4-89A5-7CBFE8E21B77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA336B9B-4EE4-422B-86BC-4F1F78B8B251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA336B9B-4EE4-422B-86BC-4F1F78B8B251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA336B9B-4EE4-422B-86BC-4F1F78B8B251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA336B9B-4EE4-422B-86BC-4F1F78B8B251}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A92D2D7E-4CF3-4D53-9D51-D991F5907897}
+	EndGlobalSection
+EndGlobal
