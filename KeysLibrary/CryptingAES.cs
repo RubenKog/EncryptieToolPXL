@@ -9,28 +9,46 @@ using System.Threading.Tasks;
 
 namespace KeysLibrary
 {
-    public static class CryptingAES
+    public class CryptingAES
     {
+        public string ImageEncoded { get; set; }
 
-        public static string ImageEncoded {  get; set; }
-
-
-        public static List<string> EncryptThenDecrypt(string ToEncrypt = "This is the default value in the event no base64 is given.")
+        public static string Encrypt(string ToEncrypt)
         {
-            List<string> demoReturnList = new List<string>();
             using (Aes myAes = Aes.Create())
             {
                 byte[] encryptedString = EncryptStringToBytes_Aes(ToEncrypt, myAes.Key, myAes.IV);
-                /*string decryptedString = DecryptStringFromBytes_Aes(encryptedString, myAes.Key, myAes.IV); 
-                demoReturnList.Add(ToEncryptTest);
-                demoReturnList.Add( ByteArToReadableString(encryptedString));
-                demoReturnList.Add(decryptedString);
-                demoReturnList.Add(ByteArToReadableString(myAes.Key));
-                demoReturnList.Add(ByteArToReadableString(myAes.IV));*/
+                return ByteArToReadableString(encryptedString);
             }
-            return demoReturnList;
-               
         }
+        public static string Decrypt(string ToDecrypt)
+        {
+            using (Aes myAes = Aes.Create())
+            {
+                byte[] decryptedString = new byte[0]; 
+                for (int i = 0; i > decryptedString.Length; i++)
+                {
+                    decryptedString[i] = Convert.ToByte(ToDecrypt);
+                }
+                return DecryptStringFromBytes_Aes(decryptedString, myAes.Key, myAes.IV);
+            }
+        }
+        //public static List<string> EncryptThenDecrypt(string ToEncrypt)
+        //{
+        //    List<string> demoReturnList = new List<string>();
+        //    using (Aes myAes = Aes.Create())
+        //    {
+        //        byte[] encryptedString = EncryptStringToBytes_Aes(ToEncrypt, myAes.Key, myAes.IV);
+        //        /*string decryptedString = DecryptStringFromBytes_Aes(encryptedString, myAes.Key, myAes.IV); 
+        //        demoReturnList.Add(ToEncryptTest);
+        //        demoReturnList.Add( ByteArToReadableString(encryptedString));
+        //        demoReturnList.Add(decryptedString);
+        //        demoReturnList.Add(ByteArToReadableString(myAes.Key));
+        //        demoReturnList.Add(ByteArToReadableString(myAes.IV));*/
+        //    }
+        //    return demoReturnList;
+               
+        //}
 
         public static string ByteArToReadableString(byte[] byteArray)
         {

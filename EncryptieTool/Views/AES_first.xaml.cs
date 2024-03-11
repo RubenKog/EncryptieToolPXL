@@ -24,52 +24,73 @@ namespace EncryptieTool.Views
     public partial class AES_first : Window
     {
         string B64Text = string.Empty;
+        CryptingAES cryptingAES;
         public AES_first()
         {
+            cryptingAES = new CryptingAES();
             InitializeComponent();
         }
-        private void BtnUseAES_Click(object sender, RoutedEventArgs e)
+        private void BtnEncryptAES_Click(object sender, RoutedEventArgs e)
         {
-            ChosenKey.Method = "Use";
-
+            ChosenKey.Method = "Encrypt";
+            if (cryptingAES.ImageEncoded != null)
+            {
+                TxtEncrypt.Items.Add(CryptingAES.Encrypt(cryptingAES.ImageEncoded));
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("please select an image to encrypt");
+            }
         }
 
-        private void BtnGenAES_Click(object sender, RoutedEventArgs e)
+        private void BtnDecryptAES_Click(object sender, RoutedEventArgs e)
         {
-            ChosenKey.Method = "Gen";
-
+            ChosenKey.Method = "Decrypt";
+            if (cryptingAES.ImageEncoded != null)
+            {
+                TxtDecrypt.Items.Add(CryptingAES.Decrypt(cryptingAES.ImageEncoded));
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("please select an image to encrypt");
+            }
         }
 
-        private void BtnUglyTest_Click(object sender, RoutedEventArgs e)
-        {
-            List<string> toDisplayList = CryptingAES.EncryptThenDecrypt();
-            string ToEncrpyt = toDisplayList[0];
-            string Encryted = toDisplayList[1];
-            string Decrypted = toDisplayList[2];
-            string KeyofAES = toDisplayList[3];
-            string IVofAES = toDisplayList[4];
+        //private void BtnUglyTest_Click(object sender, RoutedEventArgs e)
+        //{
+        //    List<string> toDisplayList = CryptingAES.EncryptThenDecrypt("fd");
+        //    string ToEncrpyt = toDisplayList[0];
+        //    string Encryted = toDisplayList[1];
+        //    string Decrypted = toDisplayList[2];
+        //    string KeyofAES = toDisplayList[3];
+        //    string IVofAES = toDisplayList[4];
 
-            System.Windows.Forms.MessageBox.Show($"string to encryt: {ToEncrpyt}");
-            System.Windows.Forms.MessageBox.Show($"After encryption: {Encryted}");
-            System.Windows.Forms.MessageBox.Show($"after decryption: {Decrypted}");
-            System.Windows.Forms.MessageBox.Show($"AES key: {KeyofAES}");
-            System.Windows.Forms.MessageBox.Show($"AES Initialization Vector: {IVofAES}");
-
-
-
-        }
+        //    System.Windows.Forms.MessageBox.Show($"string to encryt: {ToEncrpyt}");
+        //    System.Windows.Forms.MessageBox.Show($"After encryption: {Encryted}");
+        //    System.Windows.Forms.MessageBox.Show($"after decryption: {Decrypted}");
+        //    System.Windows.Forms.MessageBox.Show($"AES key: {KeyofAES}");
+        //    System.Windows.Forms.MessageBox.Show($"AES Initialization Vector: {IVofAES}");
+        //}
 
         private void BtnSelectImage_Click(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new System.Windows.Forms.OpenFileDialog();
             openFileDialog.Filter = "Image Files (*.jpg; *.jpeg; *.png; *.gif; *.bmp)|*.jpg; *.jpeg; *.png; *.gif; *.bmp";
-
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 byte[] imageBytes = File.ReadAllBytes(openFileDialog.FileName);
-                CryptingAES.ImageEncoded = Convert.ToBase64String(imageBytes);
+                cryptingAES.ImageEncoded = Convert.ToBase64String(imageBytes);
 
-                //Console.WriteLine(CryptingAES.ImageEncoded);
+                #region FileName
+                string filePath = openFileDialog.FileName;
+                int lastSlashIndex = Math.Max(filePath.LastIndexOf('\\'), filePath.LastIndexOf('/'));
+                string result = (lastSlashIndex >= 0) ? filePath.Substring(lastSlashIndex + 1) : filePath;
+                lbImageName.Content = result;
+                #endregion
+
+                Console.WriteLine(cryptingAES.ImageEncoded);
+                BtnEncryptAESx.IsEnabled = true;
+                BtnDecryptAESx.IsEnabled = true;
             }
             else
             {

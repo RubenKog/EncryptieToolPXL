@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EncryptieTool.Views"
+        xmlns:foreign="clr-namespace:KeysLibrary;assembly=KeysLibrary"
         mc:Ignorable="d"
         Title="AES_first" Height="450" Width="800">
     <Grid>
@@ -27,9 +28,16 @@
 
         <Button Name="BtnSelectImage" Grid.Column="1" Grid.Row="1" Margin="30px" Content="Select Image" Background="Black" Foreground="White" Click="BtnSelectImage_Click"/>
 
-        <Button Name="BtnUseAES" Grid.Column="0" Grid.Row="2" Margin="30px" Content="Use Key" Background="Black" Foreground="White" Click="BtnUseAES_Click"/>
-        <Button Name="BtnGenAES" Grid.Column="2" Grid.Row="2" Margin="30px" Content="Gen Key" Background="Black" Foreground="White" Click="BtnGenAES_Click"/>
-        <Button Name="BtnUglyTest" Grid.Column="1" Content="The Ugly Testbutton" HorizontalAlignment="Center" Margin="0,30,0,0" Grid.Row="2" VerticalAlignment="Top" Height="64" Width="180" Click="BtnUglyTest_Click"/>
+        <Button Name="BtnEncryptAESx" IsEnabled="False" Grid.Column="0" Grid.Row="2" Margin="30px" Content="Encrypt" Background="Black" Foreground="White" Click="BtnEncryptAES_Click"/>
+        <Button Name="BtnDecryptAESx" IsEnabled="False" Grid.Column="2" Grid.Row="2" Margin="30px" Content="Decrypt" Background="Black" Foreground="White" Click="BtnDecryptAES_Click"/>
 
+        <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center">
+            <Label Content="chosen image:"/>
+            <Label Name="lbImageName"/>
+        </StackPanel>
+        
+        <ListBox Background="White" Name="TxtEncrypt" Grid.Row="3" Grid.Column="0" Margin="10"/>
+
+        <ListBox Background="Black" IsEnabled="False" Name="TxtDecrypt" Grid.Row="3" Grid.Column="2" Margin="10"/>
     </Grid>
 </Window>
