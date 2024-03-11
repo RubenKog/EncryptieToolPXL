@@ -25,6 +25,8 @@
         <Label Content="Use Key" Grid.Column="0" Grid.Row="1" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Label Content="Generate Key" Grid.Column="2" Grid.Row="1" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
+        <Button Name="BtnSelectImage" Grid.Column="1" Grid.Row="1" Margin="30px" Content="Select Image" Background="Black" Foreground="White" Click="BtnSelectImage_Click"/>
+
         <Button Name="BtnUseAES" Grid.Column="0" Grid.Row="2" Margin="30px" Content="Use Key" Background="Black" Foreground="White" Click="BtnUseAES_Click"/>
         <Button Name="BtnGenAES" Grid.Column="2" Grid.Row="2" Margin="30px" Content="Gen Key" Background="Black" Foreground="White" Click="BtnGenAES_Click"/>
         <Button Name="BtnUglyTest" Grid.Column="1" Content="The Ugly Testbutton" HorizontalAlignment="Center" Margin="0,30,0,0" Grid.Row="2" VerticalAlignment="Top" Height="64" Width="180" Click="BtnUglyTest_Click"/>

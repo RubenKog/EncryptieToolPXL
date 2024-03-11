@@ -12,22 +12,21 @@ namespace KeysLibrary
     public static class CryptingAES
     {
 
-        
+        public static string ImageEncoded {  get; set; }
 
 
-        public static List<string> EncryptThenDecrypt()
+        public static List<string> EncryptThenDecrypt(string ToEncrypt = "This is the default value in the event no base64 is given.")
         {
             List<string> demoReturnList = new List<string>();
-            string ToEncryptTest = "This will be encrypted as a test!";
             using (Aes myAes = Aes.Create())
             {
-                byte[] encryptedString = EncryptStringToBytes_Aes(ToEncryptTest, myAes.Key, myAes.IV);
-                string decryptedString = DecryptStringFromBytes_Aes(encryptedString, myAes.Key, myAes.IV); 
+                byte[] encryptedString = EncryptStringToBytes_Aes(ToEncrypt, myAes.Key, myAes.IV);
+                /*string decryptedString = DecryptStringFromBytes_Aes(encryptedString, myAes.Key, myAes.IV); 
                 demoReturnList.Add(ToEncryptTest);
                 demoReturnList.Add( ByteArToReadableString(encryptedString));
                 demoReturnList.Add(decryptedString);
                 demoReturnList.Add(ByteArToReadableString(myAes.Key));
-                demoReturnList.Add(ByteArToReadableString(myAes.IV));
+                demoReturnList.Add(ByteArToReadableString(myAes.IV));*/
             }
             return demoReturnList;
                
@@ -134,8 +133,6 @@ namespace KeysLibrary
 
             return plaintext;
         }
-
-
 
 
 

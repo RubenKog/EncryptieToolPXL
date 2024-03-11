@@ -1,6 +1,7 @@
 ﻿using KeysLibrary;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using KeysLibrary;
 
 namespace EncryptieTool.Views
 {
@@ -21,6 +23,7 @@ namespace EncryptieTool.Views
     /// </summary>
     public partial class AES_first : Window
     {
+        string B64Text = string.Empty;
         public AES_first()
         {
             InitializeComponent();
@@ -54,6 +57,24 @@ namespace EncryptieTool.Views
 
 
 
+        }
+
+        private void BtnSelectImage_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "Image Files (*.jpg; *.jpeg; *.png; *.gif; *.bmp)|*.jpg; *.jpeg; *.png; *.gif; *.bmp";
+
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                byte[] imageBytes = File.ReadAllBytes(openFileDialog.FileName);
+                CryptingAES.ImageEncoded = Convert.ToBase64String(imageBytes);
+
+                //Console.WriteLine(CryptingAES.ImageEncoded);
+            }
+            else
+            {
+                Console.WriteLine("No file selected.");
+            }
         }
     }
 }
