@@ -21,20 +21,20 @@
         <Grid.Background>
             <ImageBrush ImageSource="Images/redVblue2.bmp"/>
         </Grid.Background>
-        <Label Content="Encryption Tool 1.0" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White"/>
+        <Label Content="Encryption Tool 0.5" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White"/>
 
 
-        <Label Content="AES key pair" Grid.Column="0" Grid.Row="1" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Label Content="RSA key" Grid.Column="2" Grid.Row="1" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="AES" Grid.Column="0" Grid.Row="1" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="RSA" Grid.Column="2" Grid.Row="1" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
         <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Background="White">
-            <Label Content="Current selected folder where keys will be saved" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Name="LbIsFolderSelected" Content="Select a folder to store keys." HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Button Name="BtnFolder" Content="Select folder" Margin="30 10" Visibility="Visible" Click="BtnFolder_Click" />
             <Label Name="LbFolder" Content="Folder location" HorizontalAlignment="Center" FontWeight="Black" Visibility="Hidden" />
         </StackPanel>
         
-        <Button Name="BtnAES" Grid.Column="0" Grid.Row="2" Margin="30px" Content="Generate Key" Background="Black" Foreground="White" Click="BtnAES_Click"/>
-        <Button Name="BtnRSA" Grid.Column="2" Grid.Row="2" Margin="30px" Content="Generate Key" Background="Black" Foreground="White" Click="BtnRSA_Click"/>
+        <Button IsEnabled="False" Name="BtnAES" Grid.Column="0" Grid.Row="2" Margin="30px" Content="Encrypt with AES" Background="Black" Foreground="White" Click="BtnAES_Click"/>
+        <Button IsEnabled="False" Name="BtnRSA" Grid.Column="2" Grid.Row="2" Margin="30px" Content="Encrypt with RSA" Background="Black" Foreground="White" Click="BtnRSA_Click"/>
 
     </Grid>
 </Window>

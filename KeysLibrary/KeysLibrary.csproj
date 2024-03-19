@@ -50,10 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AesInfo.cs" />
     <Compile Include="ChosenKey.cs" />
     <Compile Include="CryptingAES.cs" />
     <Compile Include="CryptingRSA.cs" />
+    <Compile Include="EncryptedImgInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectedPaths.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

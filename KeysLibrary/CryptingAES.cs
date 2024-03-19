@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace KeysLibrary
 {
@@ -13,25 +14,30 @@ namespace KeysLibrary
     {
         public string ImageEncoded { get; set; }
 
-        public static string Encrypt(string ToEncrypt)
-        {
-            using (Aes myAes = Aes.Create())
-            {
-                byte[] encryptedString = EncryptStringToBytes_Aes(ToEncrypt, myAes.Key, myAes.IV);
-                return ByteArToReadableString(encryptedString);
-            }
+
+        public Aes CreateAES() 
+        { 
+            Aes aes = Aes.Create();
+            
+            return aes; 
         }
-        public static string Decrypt(string ToDecrypt)
+
+        public string Encrypt(string ToEncrypt, AesInfo myAes)
         {
-            using (Aes myAes = Aes.Create())
-            {
-                byte[] decryptedString = new byte[0]; 
-                for (int i = 0; i > decryptedString.Length; i++)
-                {
-                    decryptedString[i] = Convert.ToByte(ToDecrypt);
-                }
-                return DecryptStringFromBytes_Aes(decryptedString, myAes.Key, myAes.IV);
-            }
+
+            string myAesKey = myAes.AesKey;
+            string myAesIV = myAes.AesIV;
+            byte[] encryptedString = EncryptStringToBytes_Aes(ToEncrypt, Convert.FromBase64String(myAesKey), Convert.FromBase64String(myAesIV));
+            return ByteArToReadableString(encryptedString);
+            
+        }
+        public string Decrypt(string ToDecrypt, AesInfo myAes)
+        {
+            string myAesKey = myAes.AesKey;
+            string myAesIV = myAes.AesIV;
+            byte[] toDecryptString = Convert.FromBase64String(ToDecrypt);
+            return DecryptStringFromBytes_Aes(toDecryptString, Convert.FromBase64String(myAesKey), Convert.FromBase64String(myAesIV));
+            
         }
         //public static List<string> EncryptThenDecrypt(string ToEncrypt)
         //{
@@ -50,20 +56,10 @@ namespace KeysLibrary
                
         //}
 
-        public static string ByteArToReadableString(byte[] byteArray)
+        public string ByteArToReadableString(byte[] byteArray)
         {
-            string returnString = "";
-            foreach(byte item in byteArray)
-            {
-                if(returnString.Length == 0)
-                {
-                    returnString = item.ToString();
-                }
-                else
-                {
-                    returnString = returnString + "-" + item.ToString();
-                }
-            }
+            string returnString = Convert.ToBase64String(byteArray);
+            
             return returnString;
 
 
