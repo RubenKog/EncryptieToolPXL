@@ -12,7 +12,5 @@ namespace KeysLibrary
         public string AesKey { get; set;}
         public string AesIV { get; set;}
 
-
-
     }
 }

@@ -317,7 +317,7 @@ namespace EncryptieTool.Views
 
         }
 
-        private void ReadAesKeyFromFile()
+        private void ReadAesKeyFromFile() 
         {
             string filePath = Path.Combine(SelectedPaths.SelectedKeyFolder, "Aes/AESInfo.txt");
             if (File.Exists(filePath))

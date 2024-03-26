@@ -34,7 +34,7 @@
         </StackPanel>
         
         <Button IsEnabled="False" Name="BtnAES" Grid.Column="0" Grid.Row="2" Margin="30px" Content="Encrypt with AES" Background="Black" Foreground="White" Click="BtnAES_Click"/>
-        <Button IsEnabled="False" Name="BtnRSA" Grid.Column="2" Grid.Row="2" Margin="30px" Content="Encrypt with RSA" Background="Black" Foreground="White" Click="BtnRSA_Click"/>
+        <Button Name="BtnRSA" Grid.Column="2" Grid.Row="2" Margin="30px" Content="Encrypt with RSA" Background="Black" Foreground="White" Click="BtnRSA_Click"/>
 
     </Grid>
 </Window>
