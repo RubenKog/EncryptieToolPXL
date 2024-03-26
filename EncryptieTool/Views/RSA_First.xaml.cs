@@ -4,95 +4,182 @@ using System;
 using System.IO;
 using System.Windows;
 
+using KeysLibrary;
+using System;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using System.Security.Cryptography;
+using Path = System.IO.Path;
+using System.Drawing;
+
 namespace EncryptieTool.Views
 {
 	public partial class RSA_First : Window
 	{
+		private List<AesInfo> AesList;
+
 		public RSA_First()
 		{
+			AesList = new List<AesInfo>();
 			InitializeComponent();
 		}
 
 		private void BtnUseRSA_Click(object sender, RoutedEventArgs e)
 		{
-			// Implementatie voor het gebruik van een bestaande RSA-sleutel
-			ChosenKey.Method = "Use";
-			MessageBox.Show("Gebruik een bestaande RSA-sleutel", "Informatie", MessageBoxButton.OK, MessageBoxImage.Information);
-		}
-
-		private void BtnGenRSA_Click(object sender, RoutedEventArgs e)
-		{
-			// Implementatie voor het genereren van een nieuwe RSA-sleutel
-			ChosenKey.Method = "Gen";
-
-			var rsa = new CryptingRSA();
-			var (publicKey, privateKey) = rsa.GenerateRSAKeyPair();
-
-			// Genereer een unieke bestandsnaam op basis van de huidige tijd
-			string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-			string publicKeyFilename = $"RSA_PublicKey_{timestamp}.xml";
-			string privateKeyFilename = $"RSA_PrivateKey_{timestamp}.xml";
-
-			// Stel een standaardlocatie in om de sleutels op te slaan, bijv. in de map Documenten
-			string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			string fullPathPublic = Path.Combine(folderPath, publicKeyFilename);
-			string fullPathPrivate = Path.Combine(folderPath, privateKeyFilename);
-
-			// Sla de sleutels op
-			File.WriteAllText(fullPathPublic, publicKey);
-			File.WriteAllText(fullPathPrivate, privateKey);
-
-			MessageBox.Show($"RSA-sleutelpaar gegenereerd en opgeslagen als:\n{fullPathPublic}\n{fullPathPrivate}", "RSA Sleutelpaar", MessageBoxButton.OK, MessageBoxImage.Information);
-		}
-
-		private string ChoosePngFile()
-		{
-			var openFileDialog = new Microsoft.Win32.OpenFileDialog
+			OpenFileDialog openFileDialog = new OpenFileDialog
 			{
-				Filter = "PNG Files (*.png)|*.png",
-				Title = "Selecteer een PNG-bestand"
+				InitialDirectory = @"C:\RSAPrivate",
+				Filter = "XML Files (*.xml)|*.xml",
+				Title = "Selecteer een Private RSA Sleutel"
 			};
 
-			bool? result = openFileDialog.ShowDialog();
-			if (result == true)
+			if (openFileDialog.ShowDialog() == true)
 			{
-				return openFileDialog.FileName;
-			}
+				string privateKey = File.ReadAllText(openFileDialog.FileName);
 
-			return null;
+				try
+				{
+					string selectedAesName = LstAesKeys.SelectedItem.ToString();
+					AesInfo selectedAesInfo = AesList.FirstOrDefault(aes => aes.AesName == selectedAesName);
+
+					if (selectedAesInfo == null)
+					{
+						MessageBox.Show("Selecteer een geldige AES sleutel uit de lijst.", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+						return;
+					}
+
+					string encryptedAesKeyPath = Path.Combine(@"C:\RSAPublic", $"{selectedAesInfo.AesName}_EncryptedAESKey.txt");
+					if (!File.Exists(encryptedAesKeyPath))
+					{
+						MessageBox.Show("Geëncrypteerde AES sleutelbestand niet gevonden.", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+						return;
+					}
+
+					byte[] encryptedAesKey = File.ReadAllBytes(encryptedAesKeyPath);
+					var rsa = new CryptingRSA();
+					var decryptedAesKey = rsa.DecryptData(encryptedAesKey, privateKey);
+
+					TxtDecryptedAES.Text = decryptedAesKey;
+				}
+				catch (CryptographicException)
+				{
+					MessageBox.Show("De gekozen RSA sleutel is niet correct of het bestand is beschadigd.", "Decryptie Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+			}
+		}
+
+		private void BtnSelectAESFile_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog
+			{
+				Filter = "Text Files (*.txt)|*.txt",
+				Title = "Selecteer een AESInfo bestand"
+			};
+			if (openFileDialog.ShowDialog() == true)
+			{
+				ReadAesKeyFromFile(openFileDialog.FileName);
+			}
 		}
 
 		private void BtnEncryptAndSave_Click(object sender, RoutedEventArgs e)
 		{
-			string pngFilePath = ChoosePngFile();
-			if (pngFilePath == null)
+			if (LstAesKeys.SelectedItem == null)
 			{
-				MessageBox.Show("Geen bestand geselecteerd.", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+				MessageBox.Show("Selecteer een AES sleutel.", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
 				return;
 			}
 
-			// Genereer RSA-sleutelpaar
+			string selectedAesName = LstAesKeys.SelectedItem.ToString();
+			AesInfo selectedAesInfo = AesList.FirstOrDefault(aes => aes.AesName == selectedAesName);
+
+			if (selectedAesInfo == null)
+			{
+				MessageBox.Show("AES sleutel niet gevonden.", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+				return;
+			}
+
 			var rsa = new CryptingRSA();
 			var (publicKey, privateKey) = rsa.GenerateRSAKeyPair();
 
-			// Versleutel de inhoud van het bestand (voor de demo versleutelen we een placeholder tekst)
-			var encryptedData = rsa.EncryptData($"Versleutelde inhoud van {Path.GetFileName(pngFilePath)}", publicKey);
-			string encryptedContentBase64 = Convert.ToBase64String(encryptedData);
+			var encryptedAesKey = rsa.EncryptData(selectedAesInfo.AesKey, publicKey);
 
-			// Definieer de map waarin je de bestanden wilt opslaan
-			string folderPath = @"C:\EncryptedPNGs";
-			if (!Directory.Exists(folderPath))
+			SaveData(encryptedAesKey, publicKey, privateKey, selectedAesInfo.AesName);
+		}
+
+		private void SaveData(byte[] encryptedAesKey, string publicKey, string privateKey, string aesName)
+		{
+			string publicPath = @"C:\RSAPublic";
+			string privatePath = @"C:\RSAPrivate";
+			Directory.CreateDirectory(publicPath);
+			Directory.CreateDirectory(privatePath);
+
+			File.WriteAllText(Path.Combine(publicPath, $"{aesName}_PublicKey.xml"), publicKey);
+			File.WriteAllText(Path.Combine(privatePath, $"{aesName}_PrivateKey.xml"), privateKey);
+			File.WriteAllBytes(Path.Combine(publicPath, $"{aesName}_EncryptedAESKey.txt"), encryptedAesKey);
+
+			MessageBox.Show("Encryptie en opslag voltooid.", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
+		}
+
+		private void ReadAesKeyFromFile(string selectedFilePath)
+		{
+			if (Path.GetFileName(selectedFilePath) != "AESInfo.txt")
 			{
-				Directory.CreateDirectory(folderPath);
+				MessageBox.Show("Selecteer het bestand met de naam 'AESInfo.txt'.", "Verkeerde bestandsnaam", MessageBoxButton.OK, MessageBoxImage.Warning);
+				return;
 			}
 
-			// Sla de versleutelde inhoud en de sleutels op
-			string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-			File.WriteAllText(Path.Combine(folderPath, $"encrypted_{timestamp}.txt"), encryptedContentBase64);
-			File.WriteAllText(Path.Combine(folderPath, $"publicKey_{timestamp}.xml"), publicKey);
-			File.WriteAllText(Path.Combine(folderPath, $"privateKey_{timestamp}.xml"), privateKey);
+			AesList.Clear();
 
-			MessageBox.Show($"Versleuteling voltooid en bestanden opgeslagen in {folderPath}.", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
+			using (StreamReader reader = new StreamReader(selectedFilePath))
+			{
+				string line;
+				string aesName = null, aesKey = null, aesIV = null;
+
+				while ((line = reader.ReadLine()) != null)
+				{
+					if (line.StartsWith("AES Name:"))
+					{
+						aesName = line.Split(':')[1].Trim();
+					}
+					else if (line.StartsWith("AES Key:"))
+					{
+						aesKey = line.Split(':')[1].Trim();
+					}
+					else if (line.StartsWith("AES IV:"))
+					{
+						aesIV = line.Split(':')[1].Trim();
+					}
+					else if (string.IsNullOrWhiteSpace(line) && aesName != null && aesKey != null && aesIV != null)
+					{
+						AesInfo info = new AesInfo()
+						{
+							AesName = aesName,
+							AesKey = aesKey,
+							AesIV = aesIV
+						};
+
+						AesList.Add(info);
+						aesName = aesKey = aesIV = null;
+					}
+				}
+			}
+
+			List<string> nameList = new List<string>();
+			foreach (AesInfo aesInfo in AesList)
+			{
+				nameList.Add(aesInfo.AesName);
+			}
+			LstAesKeys.ItemsSource = nameList;
 		}
 	}
 }

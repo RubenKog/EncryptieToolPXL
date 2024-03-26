@@ -22,12 +22,18 @@
             <ImageBrush ImageSource="../Images/blue.png"/>
         </Grid.Background>
 
-        <Label Content="Gebruik Sleutel" Grid.Column="0" Grid.Row="1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Label Content="Genereer Sleutel" Grid.Column="2" Grid.Row="1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Label Content="Encrypteer en Sla Op" Grid.Column="1" Grid.Row="3" FontSize="20" Margin="0,100,0,0" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Label Content="RSA" Grid.Column="1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Label Content="Gebruik RSA Sleutel" Grid.Column="0" Grid.Row="1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="Laad AES keys" Grid.Column="2" Grid.Row="1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="Encrypteer en Sla Op" Grid.Column="1" Grid.Row="3" FontSize="20" Margin="0,35,0,0" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+        <ListBox Name="LstAesKeys" Grid.Column="1" Grid.Row="2" Height="100" Margin="10"/>
+
+        <Label Content="AES Sleutel" Grid.Row="3" FontSize="20" Margin="0,35,0,0"  FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <TextBox Name="TxtDecryptedAES" Grid.Column="0" Grid.Row="3" Height="30" Margin="20,86,20,125"></TextBox>
 
         <Button Name="BtnUseRSA" Grid.Column="0" Grid.Row="2" Margin="30" Height="50" Content="Gebruik Sleutel" Background="Black" Foreground="White" Click="BtnUseRSA_Click"/>
-        <Button Name="BtnGenRSA" Grid.Column="2" Grid.Row="2" Margin="30" Content="Genereer Sleutel" Background="Black" Foreground="White" Click="BtnGenRSA_Click"/>
-        <Button Name="BtnEncryptAndSave" Grid.Column="1" Grid.Row="3" Margin="39,143,39,94" Height="50" Content="Encrypteer en Sla Op" Background="Black" Foreground="White" Click="BtnEncryptAndSave_Click"/>
+        <Button Name="BtnSelectAESFile" Grid.Column="2" Grid.Row="2" Margin="30" Content="Selecteer AESInfo Bestand" Background="Black" Foreground="White" Click="BtnSelectAESFile_Click"/>
+        <Button Name="BtnEncryptAndSave" Grid.Column="1" Grid.Row="3" Margin="39,76,39,115" Height="50" Content="Encrypteer en Sla Op" Background="Black" Foreground="White" Click="BtnEncryptAndSave_Click"/>
     </Grid>
 </Window>
