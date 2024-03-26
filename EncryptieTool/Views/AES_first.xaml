@@ -46,15 +46,16 @@
         <StackPanel Grid.Column="2" Grid.Row="2" >
             <TextBox Name="TxtImgName" Text="Image Name" TextAlignment="Center" Margin="10px"></TextBox>
             <Button  Name="BtnDecryptAESx" IsEnabled="False" Margin="30px" Content="Decrypt" Background="Black" Foreground="White" Click="BtnDecryptAES_Click"/>
-
         </StackPanel>
-       
-        <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Grid.RowSpan="2">
+
+        <TextBox Grid.Row="2" Grid.Column="1" Name="TxTDecryptedTxtName" Text="Decrypted ImageName" TextAlignment="Center" Margin="15px" Height="20px"></TextBox>
+
+        <StackPanel Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Grid.RowSpan="2">
             <Label Content="Chosen Image:"/>
             <Label Name="lbImageName"/>
-            
+            <Image Name="PickedImg" Height="60" Width="60" Source="../Images/Image_Encrypted.jpg"></Image>
+
         </StackPanel>
-        <Image Grid.Column="1" Grid.Row="4" Name="PickedImg" Height="100" Width="100" Source="../Images/Image_Encrypted.jpg"></Image>
         <ListBox SelectionChanged="TxtEncrypt_SelectionChanged" Background="Red" Name="TxtEncrypt" Grid.Row="3" Grid.Column="0" Margin="10"/>
 
         <ListBox SelectionChanged="TxtDecrypt_SelectionChanged" Background="Red"  Name="TxtDecrypt" Grid.Row="3" Grid.Column="2" Margin="10"/>
