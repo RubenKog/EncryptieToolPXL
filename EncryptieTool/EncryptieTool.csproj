@@ -130,11 +130,21 @@
     <Resource Include="Images\redVblue2.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\blue.png" />
+    <Resource Include="Images\blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\red.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Image_Encrypted.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\check.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\warning.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
