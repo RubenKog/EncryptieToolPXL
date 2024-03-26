@@ -82,7 +82,15 @@ namespace EncryptieTool.Views
         private void SaveCryptedImg(string EncryptedImg)
         {
             string imgName = TxtImgName.Text;
-            string filePath = Path.Combine(SelectedPaths.SelectedSaveEncryptFolder, "EncryptedImg.txt");
+
+            string folderPath = Path.Combine($"{SelectedPaths.SelectedSaveEncryptFolder}\\Encrypted\\");
+            string filePath = Path.Combine(folderPath, "EncryptedImg.txt");
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
             using (StreamWriter writer = File.AppendText(filePath))
             {
                 // Write the AES information as a group of three
@@ -91,13 +99,10 @@ namespace EncryptieTool.Views
                 writer.WriteLine(); // Add an empty line to separate groups
             }
             ReadCryptedImg();
-
-
-
         }
         private void ReadCryptedImg()
         {
-            string filePath = Path.Combine(SelectedPaths.SelectedSaveEncryptFolder, "EncryptedImg.txt");
+            string filePath = Path.Combine($"{SelectedPaths.SelectedSaveEncryptFolder}\\Encrypted\\EncryptedImg.txt");
             if (File.Exists(filePath))
             {
                 EncryptedImgInfo.Clear();
@@ -154,10 +159,16 @@ namespace EncryptieTool.Views
                 // Create an Image from the MemoryStream
                 System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
 
-                
+
 
                 // Combine the chosen path and image name to form the full file path
-                string filePath = Path.Combine(SelectedPaths.SelectedSaveEncryptFolder, $"{TxtImgName.Text}.png");
+                string folderPath = Path.Combine($"{SelectedPaths.SelectedSaveEncryptFolder}\\Decrypted\\");
+                string filePath = Path.Combine(folderPath, $"{TxtImgName.Text}.png");
+
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
 
                 // Save the image to the specified path
                 image.Save(filePath);
@@ -281,7 +292,16 @@ namespace EncryptieTool.Views
             string aesIV = cryptingAES.ByteArToReadableString(aes.IV);
             string aesName = LblAesName.Text;
 
-            string filePath = Path.Combine(SelectedPaths.SelectedKeyFolder, "AESInfo.txt");
+
+            string folderPath = Path.Combine(SelectedPaths.SelectedKeyFolder, "AES");
+            string filePath = Path.Combine(folderPath, "AESInfo.txt");
+
+            // Check if the folder exists, if not, create it
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
 
             // Write the AES information to the file
             using (StreamWriter writer = File.AppendText(filePath))
@@ -299,7 +319,7 @@ namespace EncryptieTool.Views
 
         private void ReadAesKeyFromFile()
         {
-            string filePath = Path.Combine(SelectedPaths.SelectedKeyFolder, "AESInfo.txt");
+            string filePath = Path.Combine(SelectedPaths.SelectedKeyFolder, "Aes/AESInfo.txt");
             if (File.Exists(filePath))
             {
                 AesList.Clear();
