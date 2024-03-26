@@ -8,10 +8,10 @@
         Title="RSA_First" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -22,10 +22,12 @@
             <ImageBrush ImageSource="../Images/blue.png"/>
         </Grid.Background>
 
-        <Label Content="Use Key" Grid.Column="0" Grid.Row="1" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Label Content="Generate Key" Grid.Column="2" Grid.Row="1" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="Gebruik Sleutel" Grid.Column="0" Grid.Row="1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="Genereer Sleutel" Grid.Column="2" Grid.Row="1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="Encrypteer en Sla Op" Grid.Column="1" Grid.Row="3" FontSize="20" Margin="0,100,0,0" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-        <Button Name="BtnUseRSA" Grid.Column="0" Grid.Row="2" Margin="30px" Content="Use Key" Background="Black" Foreground="White" Click="BtnUseRSA_Click"/>
-        <Button Name="BtnGenRSA" Grid.Column="2" Grid.Row="2" Margin="30px" Content="Gen Key" Background="Black" Foreground="White" Click="BtnGenRSA_Click"/>
+        <Button Name="BtnUseRSA" Grid.Column="0" Grid.Row="2" Margin="30" Height="50" Content="Gebruik Sleutel" Background="Black" Foreground="White" Click="BtnUseRSA_Click"/>
+        <Button Name="BtnGenRSA" Grid.Column="2" Grid.Row="2" Margin="30" Content="Genereer Sleutel" Background="Black" Foreground="White" Click="BtnGenRSA_Click"/>
+        <Button Name="BtnEncryptAndSave" Grid.Column="1" Grid.Row="3" Margin="39,143,39,94" Height="50" Content="Encrypteer en Sla Op" Background="Black" Foreground="White" Click="BtnEncryptAndSave_Click"/>
     </Grid>
 </Window>
