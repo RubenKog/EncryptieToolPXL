@@ -6,26 +6,34 @@
         xmlns:local="clr-namespace:EncryptieTool.Views"
         mc:Ignorable="d"
         Title="RSA_First" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.Background>
-            <ImageBrush ImageSource="../Images/blue.png"/>
-        </Grid.Background>
+    <DockPanel>
+        <!--(Top) Menu-->
+        <Menu DockPanel.Dock="Top" Background="WhiteSmoke" FontWeight="Bold">
+            <MenuItem Header="File">
+                <MenuItem Tag="key" Header="Select Key Folder" Click="FolderMenuItem_Click" />
+                <MenuItem Tag="destination" Header="Select Destination Folder" Click="FolderMenuItem_Click" />
+            </MenuItem>
+            <MenuItem Header="Escape" Click="ReturnMenuItem_Click" />
+        </Menu>
 
-        <Label Content="Use Key" Grid.Column="0" Grid.Row="1" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Label Content="Generate Key" Grid.Column="2" Grid.Row="1" FontSize="20px" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!--(Bottom) Footer-->
+        <WrapPanel Orientation="Vertical" DockPanel.Dock="Bottom" Background="#222831">
+            <TextBlock x:Name="TxtKeyPath" Text="🔑 Key:" Margin="4 2" Foreground="#EEEEEE"
+                       ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
+            <TextBlock x:Name="TxtDestinationPath" Text="📁 Destination:" Margin="4 2" Foreground="#EEEEEE"
+                       ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
+        </WrapPanel>
 
-        <Button Name="BtnUseRSA" Grid.Column="0" Grid.Row="2" Margin="30px" Content="Use Key" Background="Black" Foreground="White" Click="BtnUseRSA_Click"/>
-        <Button Name="BtnGenRSA" Grid.Column="2" Grid.Row="2" Margin="30px" Content="Gen Key" Background="Black" Foreground="White" Click="BtnGenRSA_Click"/>
-    </Grid>
+        <!--Body-->
+        <TabControl>
+            <TabItem Header="Keys">
+                <Grid>
+                    <StackPanel HorizontalAlignment="Left" Margin="4">
+                        <TextBlock Text="My keys:" Margin="0 0 0 6"/>
+                        <ListBox Height="100" Width="200"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>

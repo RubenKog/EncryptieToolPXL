@@ -8,7 +8,6 @@ namespace KeysLibrary
 {
     public static class ChosenKey
     {
-
         //string with value RSA or AES
         public static string KeyType { get; set; }
 
@@ -17,8 +16,5 @@ namespace KeysLibrary
 
         //folder location
         public static string FilePath { get; set; }
-
-
-
     }
 }
