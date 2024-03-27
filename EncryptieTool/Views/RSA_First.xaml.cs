@@ -1,29 +1,11 @@
 ﻿using KeysLibrary;
 using Microsoft.Win32;
-using System;
-using System.IO;
-using System.Windows;
-
-using KeysLibrary;
-using System;
-
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Security.Cryptography;
+using System.Windows;
 using Path = System.IO.Path;
-using System.Drawing;
 
 namespace EncryptieTool.Views
 {

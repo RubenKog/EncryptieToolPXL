@@ -60,3 +60,4 @@
         <ListBox SelectionChanged="TxtDecrypt_SelectionChanged" Background="Red"  Name="TxtDecrypt" Grid.Row="3" Grid.Column="2" Margin="10"/>
     </Grid>
 </Window>
+
