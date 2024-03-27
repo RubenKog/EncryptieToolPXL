@@ -84,7 +84,7 @@ namespace EncryptieTool.Views
             string imgName = TxtImgName.Text;
 
             string folderPath = Path.Combine($"{SelectedPaths.SelectedSaveEncryptFolder}\\Encrypted\\");
-            string filePath = Path.Combine(folderPath, "EncryptedImg.txt");
+            string filePath = Path.Combine(folderPath, $"{TxTDecryptedTxtName.Text}.txt");
 
             if (!Directory.Exists(folderPath))
             {
