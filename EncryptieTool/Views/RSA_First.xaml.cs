@@ -19,6 +19,12 @@ namespace EncryptieTool.Views
 			InitializeComponent();
 		}
 
+		private void GoToMainWindow(object sender, RoutedEventArgs e)
+		{
+			MainWindow.CurrentInstance.Show();
+			this.Close();
+		}
+
 		private void BtnUseRSA_Click(object sender, RoutedEventArgs e)
 		{
 			OpenFileDialog openFileDialog = new OpenFileDialog
@@ -117,12 +123,6 @@ namespace EncryptieTool.Views
 
 		private void ReadAesKeyFromFile(string selectedFilePath)
 		{
-			if (Path.GetFileName(selectedFilePath) != "AESInfo.txt")
-			{
-				MessageBox.Show("Selecteer het bestand met de naam 'AESInfo.txt'.", "Verkeerde bestandsnaam", MessageBoxButton.OK, MessageBoxImage.Warning);
-				return;
-			}
-
 			AesList.Clear();
 
 			using (StreamReader reader = new StreamReader(selectedFilePath))

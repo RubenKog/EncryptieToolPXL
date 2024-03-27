@@ -1,8 +1,7 @@
-﻿using System;
+﻿using EncryptieTool.Views;
+using KeysLibrary;
 using System.Windows;
 using System.Windows.Forms;
-using EncryptieTool.Views;
-using KeysLibrary;
 
 namespace EncryptieTool
 {
@@ -10,10 +9,12 @@ namespace EncryptieTool
 	{
 		private RSA_First rsaWindow;
 		private AES_first aesWindow;
+		public static MainWindow CurrentInstance { get; private set; }
 
 		public MainWindow()
 		{
 			InitializeComponent();
+			CurrentInstance = this;
 			if (ChosenKey.FilePath != null)
 			{
 				BtnFolder.Content = "Change";
@@ -24,26 +25,27 @@ namespace EncryptieTool
 			Closing += MainWindow_Closing;
 		}
 
-		private void Home_Click(object sender, RoutedEventArgs e)
-		{
-			MainWindow mainWindow = new MainWindow();
-			mainWindow.Show();
-		}
-
 		private void AES_Click(object sender, RoutedEventArgs e)
 		{
-			ChosenKey.KeyType = "AES";
-			aesWindow = new AES_first();
-			aesWindow.Closed += ChildWindow_Closed;
-			this.Content = aesWindow.Content;
+			if (string.IsNullOrEmpty(SelectedPaths.SelectedKeyFolder))
+			{
+				System.Windows.MessageBox.Show("Selecteer eerst een map om de AES keys in op te slaan.", "Geen map geselecteerd", MessageBoxButton.OK, MessageBoxImage.Warning);
+			}
+			else
+			{
+				ChosenKey.KeyType = "AES";
+				aesWindow = new AES_first();
+				this.Hide();
+				aesWindow.Show();
+			}
 		}
 
 		private void RSA_Click(object sender, RoutedEventArgs e)
 		{
 			ChosenKey.KeyType = "RSA";
 			rsaWindow = new RSA_First();
-			rsaWindow.Closed += ChildWindow_Closed;
-			this.Content = rsaWindow.Content;
+			this.Hide();
+			rsaWindow.Show();
 		}
 
 		private void BtnFolder_Click(object sender, RoutedEventArgs e)
@@ -67,32 +69,11 @@ namespace EncryptieTool
 				// For example, you can store it in a variable or persist it to a file
 				// Handle the sacred path according to the will of the Omnissiah
 			}
-
-			/* using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
-			 {
-				 DialogResult result = folderDialog.ShowDialog();
-
-				 if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
-				 {
-					 ChosenKey.FilePath = folderDialog.SelectedPath;
-				 }
-			 }
-			 if (ChosenKey.FilePath != null)
-			 {
-				 BtnFolder.Content = "Change";
-				 LbFolder.Visibility = Visibility.Visible;
-				 LbFolder.Content = ChosenKey.FilePath;
-			 }*/
 		}
 
 		private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			System.Windows.Application.Current.Shutdown();
-		}
-
-		private void ChildWindow_Closed(object sender, EventArgs e)
-		{
-			//Nog niet nodig, maar wis dit nog niet
 		}
 	}
 }
