@@ -1,0 +1,55 @@
+<Window x:Class="EncryptieTool.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:EncryptieTool"
+        mc:Ignorable="d" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="About Us" Height="auto" Width="auto" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="TextAlignment" Value="Justify"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel Height="300" Width="440" Background="GhostWhite">
+        <!-- Image -->
+        <Image Source="../Images/Icons/user_manual_bigger.png" 
+               Width="120" Margin="8 8 4 8"/>
+        
+        <!-- Text -->
+        <ScrollViewer>
+            <StackPanel Margin="4 8 8 8" >
+                <!-- Shibble Shabble -->
+                <TextBlock Text="About" FontSize="36" Margin="0 6 0 4"/>
+                <TextBlock Text="Encryption Tool was created as a group project for school."/>
+                <TextBlock Text="The application was a massive success and all participants passed with no problems."/>
+                <TextBlock Text="The teacher genuinely couldn't believe his eyes!"/>
+                <TextBlock Text="So he put on his glasses and now it all made sense :P"/>
+                <TextBlock Text="Jokes aside, thank you for taking your time to check out our app!"/>
+            
+                <!-- Shootouts -->
+                <TextBlock Text="Special thanks to:" FontSize="24" Margin="0 6 0 4"/>
+                <TextBlock Text="The teacher for being a great sport and giving us the opportunity to create this app."/>
+                <TextBlock Text="The group members for their hard work and dedication."/>
+                <TextBlock Text="The internet for providing us with the resources to create this app."/>
+                <TextBlock Text="And you, for checking out our app!"/>
+            
+                <!-- Contact -->
+                <TextBlock Text="Contact" FontSize="24" Margin="0 6 0 4"/>
+                <TextBlock Text="If you have any questions or suggestions, feel free to contact us:"/>
+                <TextBlock FontSize="14">
+                    <Hyperlink NavigateUri="https://watbenjedan.info" RequestNavigate="Hyperlink_OnRequestNavigate">
+                        📧 Mail
+                    </Hyperlink>
+                </TextBlock>
+                
+                <Button Content="Ok!" Style="{StaticResource ButtonLight}" Margin="12"
+                        Click="ButtonClose"/>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

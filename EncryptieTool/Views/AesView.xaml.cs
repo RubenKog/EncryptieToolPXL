@@ -6,23 +6,29 @@ using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Media.Imaging;
 using Path = System.IO.Path;
 
 namespace EncryptieTool.Views
 {
 	/// <summary>
-	/// Interaction logic for AES_first.xaml
+	/// Interaction logic for AesView.xaml
 	/// </summary>
-	public partial class AES_first : Window
+	public partial class AesView : Page
 	{
+		#region Properties
+
 		private string B64Text = string.Empty;
 		private CryptingAES cryptingAES;
 		private bool ImageSelected;
 		private List<AesInfo> AesList;
 		private List<EncryptedImgInfo> EncryptedImgInfo;
 
-		public AES_first()
+		#endregion
+
+
+		public AesView()
 		{
 			ImageSelected = false;
 			cryptingAES = new CryptingAES();
@@ -30,19 +36,6 @@ namespace EncryptieTool.Views
 			EncryptedImgInfo = new List<EncryptedImgInfo>();
 			InitializeComponent();
 			ReadAesKeyFromFile();
-		}
-
-		private void GoToMainWindow(object sender, RoutedEventArgs e)
-		{
-			MainWindow.CurrentInstance.Show();
-			this.Close();
-		}
-
-		private void GoToRSAFirst(object sender, RoutedEventArgs e)
-		{
-			var rsaFirst = new RSA_First();
-			rsaFirst.Show();
-			this.Close();
 		}
 
 		private void BtnEncryptAES_Click(object sender, RoutedEventArgs e)
@@ -195,7 +188,10 @@ namespace EncryptieTool.Views
 		{
 			var openFileDialog = new System.Windows.Forms.OpenFileDialog();
 
-			openFileDialog.Filter = "Image Files (*.png;)|*.png;";
+			//openFileDialog.Filter = "Image Files (*.png;)|*.png;";
+			openFileDialog.Filter = "Image Files (*.png;*.jpg;*.jpeg;*.gif)|*.png;*.jpg;*.jpeg;*.gif;";
+			openFileDialog.Title = "Select an image file";
+			
 			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
 				byte[] imageBytes = File.ReadAllBytes(openFileDialog.FileName);

@@ -1,0 +1,74 @@
+<Page x:Class="EncryptieTool.Views.MainView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:EncryptieTool.Views"
+      mc:Ignorable="d"
+      Title="MainView" Height="auto" Width="auto">
+    <Grid>
+        <!-- Grid Properties -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1.5*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <ImageBrush
+                ImageSource="../Images/Backgrounds/bg-blue_red_gradient.jpg" />
+        </Grid.Background>
+
+        <!-- Title -->
+        <Border Grid.ColumnSpan="2">
+            <Border.Background>
+                <SolidColorBrush Color="DarkSlateGray" Opacity="0.5" />
+            </Border.Background>
+            <StackPanel VerticalAlignment="Center">
+                <Label FontSize="36px" FontWeight="SemiBold"
+                       Content="Encryption Tool" Foreground="White" Margin="4 0 0 0"/>
+                <Label FontSize="14px" HorizontalAlignment="Right"
+                       Content="By: 2PROA-1" Foreground="White" Margin="0 16 12 0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Center Text -->
+        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="OliveDrab" BorderThickness="1" CornerRadius="0 0 2 2"
+                Margin="0" Padding="12 8"
+                HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            <Border.Background>
+                <SolidColorBrush Color="DarkOliveGreen" Opacity="0.5"></SolidColorBrush>
+            </Border.Background>
+            <TextBlock Text="💊 Pick your poison:" FontSize="24px" FontWeight="Regular"
+                       HorizontalAlignment="Center" Foreground="White" TextWrapping="Wrap" TextAlignment="Center" />
+        </Border>
+
+        <!-- AES -->
+        <Border Grid.Row="2" Style="{StaticResource ContainerMagenta}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Aes Tool" FontSize="34px" FontWeight="Regular"
+                           HorizontalAlignment="Center" Foreground="White" TextWrapping="Wrap" TextAlignment="Center" />
+                <TextBlock Text="Use Aes to encrypt your images." Foreground="White" FontSize="16"
+                           TextWrapping="Wrap" TextAlignment="Center" />
+                <Button Style="{StaticResource ButtonMagenta}"
+                        Content="Proceed"
+                        Click="AES_Click" />
+            </StackPanel>
+        </Border>
+
+        <!-- RSA -->
+        <Border Grid.Row="2" Grid.Column="2" Style="{StaticResource ContainerAqua}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Rsa Tool" FontSize="34px" FontWeight="Regular"
+                           HorizontalAlignment="Center" Foreground="White" TextWrapping="Wrap" TextAlignment="Center" />
+                <TextBlock Text="Use Rsa to encrypt your keys." Foreground="White" FontSize="16"
+                           TextWrapping="Wrap" TextAlignment="Center" />
+                <Button Style="{StaticResource ButtonAqua}"
+                        Content="Proceed" Click="RSA_Click" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

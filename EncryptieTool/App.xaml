@@ -2,8 +2,176 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:EncryptieTool"
-             StartupUri="MainWindow.xaml">
+             StartupUri="../Windows/MainWindow.xaml">
     <Application.Resources>
-         
+        <!-- #Buttons -->
+        <!-- Magenta -->
+        <Style TargetType="{x:Type Button}" x:Key="ButtonMagenta">
+            <!--Round Corners-->
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="2" />
+                    <Setter Property="BorderBrush" Value="Magenta" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Padding" Value="8 4" />
+                </Style>
+            </Style.Resources>
+            <!--Default Styles-->
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="Padding" Value="8, 4, 8, 4" />
+            <Setter Property="MinHeight" Value="35" />
+            <Setter Property="MinWidth" Value="120" />
+            <Setter Property="Background" Value="#222831" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <!--Template for the Border-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!--Setting Hover and click effect-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#31363F" />
+                    <Setter Property="Foreground" Value="WhiteSmoke" />
+                </Trigger>
+                <Trigger Property="IsMouseCaptured" Value="True">
+                    <Setter Property="Background" Value="DarkMagenta" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!-- Aqua -->
+        <Style TargetType="{x:Type Button}" x:Key="ButtonAqua">
+            <!--Round Corners-->
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="2" />
+                    <Setter Property="BorderBrush" Value="Aqua" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Padding" Value="8 4" />
+                </Style>
+            </Style.Resources>
+            <!--Default Styles-->
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="Padding" Value="8, 4, 8, 4" />
+            <Setter Property="MinHeight" Value="35" />
+            <Setter Property="MinWidth" Value="120" />
+            <Setter Property="Background" Value="#222831" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <!--Template for the Border-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!--Setting Hover and click effect-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#31363F" />
+                    <Setter Property="Foreground" Value="WhiteSmoke" />
+                </Trigger>
+                <Trigger Property="IsMouseCaptured" Value="True">
+                    <Setter Property="Background" Value="DarkTurquoise" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!-- Light -->
+        <Style TargetType="{x:Type Button}" x:Key="ButtonLight">
+            <!--Round Corners-->
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="2" />
+                    <Setter Property="BorderBrush" Value="#222831" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Padding" Value="8 4" />
+                </Style>
+            </Style.Resources>
+            <!--Default Styles-->
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="Padding" Value="8, 4, 8, 4" />
+            <Setter Property="MinHeight" Value="35" />
+            <Setter Property="MinWidth" Value="120" />
+            <Setter Property="Background" Value="#fbfbfb" />
+            <Setter Property="Foreground" Value="#222831" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <!--Template for the Border-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!--Setting Hover and click effect-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#EEEEEE" />
+                    <Setter Property="Foreground" Value="#222831" />
+                </Trigger>
+                <Trigger Property="IsMouseCaptured" Value="True">
+                    <Setter Property="Background" Value="LightGray" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        
+        <!-- #Containers -->
+        <!-- Magenta -->
+        <Style TargetType="{x:Type Border}" x:Key="ContainerMagenta">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Magenta"/>
+            <Setter Property="CornerRadius" Value="2"/>
+            <Setter Property="Padding" Value="16 8"/>
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="DarkMagenta" Opacity="0.35"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Aqua -->
+        <Style TargetType="{x:Type Border}" x:Key="ContainerAqua">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Aqua"/>
+            <Setter Property="CornerRadius" Value="2"/>
+            <Setter Property="Padding" Value="16 8"/>
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="DarkSlateBlue" Opacity="0.35"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

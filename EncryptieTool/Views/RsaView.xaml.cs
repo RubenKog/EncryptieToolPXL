@@ -5,24 +5,20 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 using Path = System.IO.Path;
 
 namespace EncryptieTool.Views
 {
-	public partial class RSA_First : Window
+	public partial class RsaView : Page
 	{
 		private List<AesInfo> AesList;
 
-		public RSA_First()
+		public RsaView()
 		{
 			AesList = new List<AesInfo>();
 			InitializeComponent();
-		}
-
-		private void GoToMainWindow(object sender, RoutedEventArgs e)
-		{
-			MainWindow.CurrentInstance.Show();
-			this.Close();
 		}
 
 		private void BtnUseRSA_Click(object sender, RoutedEventArgs e)
