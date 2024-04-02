@@ -11,7 +11,6 @@ namespace KeysLibrary
 		public Aes CreateAES()
 		{
 			Aes aes = Aes.Create();
-
 			return aes;
 		}
 

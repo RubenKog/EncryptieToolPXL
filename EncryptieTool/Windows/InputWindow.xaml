@@ -1,0 +1,35 @@
+<Window x:Class="EncryptieTool.Windows.InputWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:EncryptieTool.Windows"
+        mc:Ignorable="d" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight"
+        Title="Input" Height="Auto" Width="Auto">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Consolas"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Consolas"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel Height="164" Width="440">
+        <!-- Image -->
+        <Image Source="../Images/Icons/writing.png" Width="100" Stretch="Uniform" Margin="8 8 4 8"/>
+        
+        <!-- Body -->
+        <StackPanel Margin="4 8 8 8" VerticalAlignment="Center">
+            <TextBlock Text="I asked(:" FontSize="32" Margin="0 0 0 4"
+                       Background="GhostWhite"/>
+            <TextBlock Text="Type your Input:" FontSize="16"/>
+            <TextBox x:Name="TxtInput" Margin="6" FontSize="14" Padding="2" TextAlignment="Center" MaxLength="32" 
+                     TextChanged="TxtInput_OnTextChanged" PreviewKeyDown="TxtInput_OnPreviewKeyDown"/>
+            <WrapPanel HorizontalAlignment="Center">
+                <Button Content="Ok!" Style="{StaticResource ButtonAqua}" Click="ButtonOk" IsDefault="True"/>
+                <Button Content="Cancel" Style="{StaticResource ButtonLight}" Click="ButtonCancel"
+                        ToolTip="Cancelling will not change input. As if it never happened."/>
+            </WrapPanel>
+        </StackPanel>
+    </DockPanel>
+</Window>

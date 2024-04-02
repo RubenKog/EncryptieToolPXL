@@ -54,7 +54,8 @@
                 <TextBlock Text="Use Aes to encrypt your images." Foreground="White" FontSize="16"
                            TextWrapping="Wrap" TextAlignment="Center" />
                 <Button Style="{StaticResource ButtonMagenta}"
-                        Content="Proceed"
+                        Content="Proceed" FontSize="20"
+                        HorizontalAlignment="Stretch"
                         Click="AES_Click" />
             </StackPanel>
         </Border>
@@ -67,7 +68,8 @@
                 <TextBlock Text="Use Rsa to encrypt your keys." Foreground="White" FontSize="16"
                            TextWrapping="Wrap" TextAlignment="Center" />
                 <Button Style="{StaticResource ButtonAqua}"
-                        Content="Proceed" Click="RSA_Click" />
+                        Content="Proceed" FontSize="20" HorizontalAlignment="Stretch"
+                        Click="RSA_Click" />
             </StackPanel>
         </Border>
     </Grid>

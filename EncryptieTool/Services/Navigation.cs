@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using EncryptieTool.Views;
 
@@ -10,6 +11,7 @@ namespace EncryptieTool.Services
         #region Properties
 
         private static Frame MainFrame;
+
         private static readonly Dictionary<string, Page> AppPages = new Dictionary<string, Page>
         {
             { "MainView", new MainView() },
@@ -27,26 +29,47 @@ namespace EncryptieTool.Services
         {
             MainFrame = frame;
         }
-        
+
         /// <summary>
         /// Navigates to the specified page within the application by setting the MainFrame's content to the appropriate view. It checks if the MainFrame is set and throws an exception if not.
         /// </summary>
-        /// <param name="page">Specifies the page to navigate to, as defined in the PageDictionary enum.</param>
+        /// <param name="page">Specifies the page to navigate to. Accepts MainView, RsaView and AesView.</param>
         /// <exception cref="Exception">Thrown when the Main Frame is not set.</exception>
         public static void Navigate(string pageName)
         {
             //! Return if Main Frame is not set
             if (MainFrame == null)
-            {
                 throw new Exception("Main Frame is not set.");
-            }
-            
+
             //! Cancel if we're already on that page
             if (AlreadyThere(pageName))
                 return;
-            
+
             //> Navigate to the selected page
             MainFrame.Content = AppPages[pageName];
+        }
+
+        public static void GoBack()
+        {
+            //> Go back one page in the main frame
+            if (MainFrame.CanGoBack)
+                MainFrame.GoBack();
+        }
+
+        public static void ReloadPages()
+        {
+            //> Reload all pages
+            AppPages["MainView"] = new MainView();
+            AppPages["RsaView"] = new RsaView();
+            AppPages["AesView"] = new AesView();
+            
+            //Refresh
+            RefreshPage();
+        }
+
+        public static void RefreshPage()
+        {
+            MainFrame.NavigationService.Refresh();
         }
 
         private static bool AlreadyThere(string pageName)

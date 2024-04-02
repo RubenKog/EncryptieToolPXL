@@ -2,355 +2,544 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using EncryptieTool.Windows;
+using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
 
 namespace EncryptieTool.Views
 {
-	/// <summary>
-	/// Interaction logic for AesView.xaml
-	/// </summary>
-	public partial class AesView : Page
-	{
-		#region Properties
+    /// <summary>
+    /// Interaction logic for AesView.xaml
+    /// </summary>
+    public partial class AesView : Page
+    {
+        #region Properties
 
-		private string B64Text = string.Empty;
-		private CryptingAES cryptingAES;
-		private bool ImageSelected;
-		private List<AesInfo> AesList;
-		private List<EncryptedImgInfo> EncryptedImgInfo;
+        private CryptingAES _cryptingAes = new CryptingAES();
+        private List<AesInfo> _aesList = new List<AesInfo>();
+        private List<EncryptedImgInfo> _encryptedImgInfo = new List<EncryptedImgInfo>();
+        private string _b64Text = string.Empty; // Never used?
 
-		#endregion
+        private string _keyName = string.Empty;
+        private string _encryptedImgName = string.Empty; //Name for the image that is being encrypted
+        private string _decryptedImgName = string.Empty; //Name for the image that is being decrypted
+
+        #endregion
+
+        public AesView()
+        {
+            InitializeComponent();
+        }
+
+        #region Misc
+
+        private void AesView_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            // Initialize the GUI when the page is requested.
+            Init();
+        }
+
+        private void Init()
+        {
+            // Read keys and encrypted images
+            ReadAesKeyFromFile();
+            ReadEncryptedImg();
+        }
+
+        private void ClearKeyName()
+        {
+            _keyName = string.Empty;
+            TxtKeyName.Text = "Click to Name Key";
+            TxtKeyName.Foreground = System.Windows.Media.Brushes.LightSteelBlue;
+        }
+
+        #endregion
+
+        #region Encrypting/Decrypting
+
+        private void BtnEncryptAES_Click(object sender, RoutedEventArgs e)
+        {
+            //Check if it's okay to encrypt
+            if (!IsOkToEncrypt()) return;
 
 
-		public AesView()
-		{
-			ImageSelected = false;
-			cryptingAES = new CryptingAES();
-			AesList = new List<AesInfo>();
-			EncryptedImgInfo = new List<EncryptedImgInfo>();
-			InitializeComponent();
-			ReadAesKeyFromFile();
-		}
+            // Set the method to Encrypt
+            int IndexPicked = ListKeys.SelectedIndex;
+            try
+            {
+                SaveEncryptedImg(_cryptingAes.Encrypt(_cryptingAes.ImageEncoded, _aesList[IndexPicked]));
+                System.Windows.MessageBox.Show("Encryption successful, image saved!", "Success",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                
+                // Clear the name
+                _encryptedImgName = string.Empty;
+                TxtEncryptedImgName.Text = "Click to Name Image";
+                TxtEncryptedImgName.Foreground = System.Windows.Media.Brushes.LightSteelBlue;
+                
+                // Unselect Items in listbox'
+                ListKeys.SelectedIndex = -1;
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("Oops, something went wrong.");
+            }
+        }
 
-		private void BtnEncryptAES_Click(object sender, RoutedEventArgs e)
-		{
-			if (ImageSelected)
-			{
-				ChosenKey.Method = "Encrypt";
-				if (cryptingAES.ImageEncoded != null)
-				{
-					int IndexPicked = TxtEncrypt.SelectedIndex;
-					try
-					{
-						SaveCryptedImg(cryptingAES.Encrypt(cryptingAES.ImageEncoded, AesList[IndexPicked]));
-						System.Windows.MessageBox.Show("Image succesfully encrypted.");
-					}
-					catch
-					{
-						System.Windows.MessageBox.Show("Oops, something went wrong.");
-					}
-				}
-				else
-				{
-					System.Windows.MessageBox.Show("Please select an image to encrypt");
-				}
-			}
-			else
-			{
-				System.Windows.MessageBox.Show("Please select an image to encrypt");
-			}
-		}
+        private void BtnGenerateKey_Click(object sender, RoutedEventArgs e)
+        {
+            //! Check if a proper name has been given to key.
+            if (string.IsNullOrEmpty(_keyName))
+            {
+                //? Ask if user wants to name the key now.
+                var result = MessageBox.Show(
+                    "No name for key was given. Would you like to name it now?",
+                    "Nameless key?",
+                    MessageBoxButton.YesNo, MessageBoxImage.Information);
 
-		private void SaveCryptedImg(string EncryptedImg)
-		{
-			string imgName = TxtImgName.Text;
+                //! If user doesn't want to name the key now, return.
+                if (result == MessageBoxResult.No) return;
 
-			string folderPath = Path.Combine($"{SelectedPaths.SelectedSaveEncryptFolder}\\Encrypted\\");
-			string filePath = Path.Combine(folderPath, $"{TxTDecryptedTxtName.Text}.txt");
+                //> Else, open the InputWindow and await the user's input
+                AssignKeyName();
 
-			if (!Directory.Exists(folderPath))
-			{
-				Directory.CreateDirectory(folderPath);
-			}
+                //! If the user still didn't give a name, return. (bruh moment -.- we got prank'd innit) 
+                if (string.IsNullOrEmpty(_keyName)) return;
+            }
 
-			using (StreamWriter writer = File.AppendText(filePath))
-			{
-				// Write the AES information as a group of three
-				writer.WriteLine($"Img Name: {imgName}");
-				writer.WriteLine($"AES-Encrypted Image: {EncryptedImg}");
-				writer.WriteLine(); // Add an empty line to separate groups
-			}
-			ReadCryptedImg();
-		}
+            //! Check if the keyName is already in use
+            if (_aesList.Any(x => x.AesName.ToUpper() == _keyName.ToUpper()))
+            {
+                MessageBox.Show("This key name is already in use. Please choose another name.", "Key Name In Use",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-		private void ReadCryptedImg()
-		{
-			string filePath = Path.Combine($"{SelectedPaths.SelectedSaveEncryptFolder}\\Encrypted\\EncryptedImg.txt");
-			if (File.Exists(filePath))
-			{
-				EncryptedImgInfo.Clear();
+            //:> Create a new AES key
+            Aes aes = _cryptingAes.CreateAES();
+            string aesKey = _cryptingAes.ByteArToReadableString(aes.Key);
+            string aesIV = _cryptingAes.ByteArToReadableString(aes.IV);
+            string aesName = _keyName;
 
-				using (StreamReader reader = new StreamReader(filePath))
-				{
-					string line;
-					string imgName = null, imgBase64 = null;
+            string filePath = Path.Combine(Directories.KeyFolderPath, "AESInfo.txt");
 
-					// Read each line and extract the AES information
-					while ((line = reader.ReadLine()) != null)
-					{
-						if (line.StartsWith("Img Name:"))
-						{
-							imgName = line.Split(':')[1].Trim();
-						}
-						else if (line.StartsWith("AES-Encrypted Image"))
-						{
-							imgBase64 = line.Split(':')[1].Trim();
-						}
-						else if (string.IsNullOrWhiteSpace(line) && imgBase64 != null && imgName != null)
-						{
-							EncryptedImgInfo info = new EncryptedImgInfo()
-							{
-								ImgName = imgName,
-								EncryptedImg = imgBase64,
-							};
+            // Check if the folder exists, if not, create it
+            if (!Directory.Exists(Directories.KeyFolderPath))
+                Directory.CreateDirectory(Directories.KeyFolderPath);
 
-							EncryptedImgInfo.Add(info);
-							imgName = imgBase64 = null; // Reset for the next group
-						}
-					}
-				}
+            // Write the AES information to the file
+            using (StreamWriter writer = File.AppendText(filePath))
+            {
+                // Write the AES information as a group of three
+                writer.WriteLine($"AES Name: {aesName}");
+                writer.WriteLine($"AES Key: {aesKey}");
+                writer.WriteLine($"AES IV: {aesIV}");
+                writer.WriteLine(); // Add an empty line to separate groups
+            }
 
-				List<string> nameList = new List<string>();
-				foreach (EncryptedImgInfo info in EncryptedImgInfo)
-				{
-					nameList.Add(info.ImgName);
-				}
-				TxtDecrypt.ItemsSource = nameList;
-			}
-		}
+            ReadAesKeyFromFile();
 
-		private void SaveDecryptedImg(string decryptedImg)
-		{
-			// Decode the Base64 string to bytes
-			byte[] imageBytes = Convert.FromBase64String(decryptedImg);
+            //Clear the keyName
+            ClearKeyName();
+        }
 
-			// Create a MemoryStream to hold the image bytes
-			using (MemoryStream ms = new MemoryStream(imageBytes))
-			{
-				// Create an Image from the MemoryStream
-				System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
+        private void BtnDecryptAES_Click(object sender, RoutedEventArgs e)
+        {
+            //Check if it's okay to decrypt
+            if (!IsOkToDecrypt()) return;
 
-				// Combine the chosen path and image name to form the full file path
-				string folderPath = Path.Combine($"{SelectedPaths.SelectedSaveEncryptFolder}\\Decrypted\\");
-				string filePath = Path.Combine(folderPath, $"{TxtImgName.Text}.png");
+            try
+            {
+                int indexPickedAes = ListKeys.SelectedIndex;
+                int indexPickedImg = ListDecryptedImgs.SelectedIndex;
+                SaveDecryptedImg(_cryptingAes.Decrypt(_encryptedImgInfo[indexPickedImg].EncryptedImg,
+                    _aesList[indexPickedAes]));
+                System.Windows.MessageBox.Show("Decryption successful, image saved!", "Success",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
 
-				if (!Directory.Exists(folderPath))
-				{
-					Directory.CreateDirectory(folderPath);
-				}
+                // Clear the name
+                _decryptedImgName = string.Empty;
+                TxtDecryptedImgName.Text = "Click to Name Image";
+                TxtDecryptedImgName.Foreground = System.Windows.Media.Brushes.LightSteelBlue;
 
-				// Save the image to the specified path
-				image.Save(filePath);
-			}
-		}
+                // Unselect Items in listbox'
+                ListDecryptedImgs.SelectedIndex = -1;
+                ListKeys.SelectedIndex = -1;
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show(
+                    "Something went wrong while decrypting the image. Are you sure you selected the right key?",
+                    "🤨",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
-		private void BtnDecryptAES_Click(object sender, RoutedEventArgs e)
-		{
-			ChosenKey.Method = "Decrypt";
-			if (cryptingAES.ImageEncoded != null)
-			{
-				try
-				{
-					int indexPickedAes = TxtEncrypt.SelectedIndex;
-					int indexPickedImg = TxtDecrypt.SelectedIndex;
-					/*TxtDecrypt.Items.Add(cryptingAES.Decrypt(cryptingAES.ImageEncoded));*/
-					SaveDecryptedImg(cryptingAES.Decrypt(EncryptedImgInfo[indexPickedImg].EncryptedImg, AesList[indexPickedAes]));
-					System.Windows.MessageBox.Show("Decryption succesful, image saved!");
-				}
-				catch
-				{
-					System.Windows.MessageBox.Show("Oops, something went wrong. You might have selected the wrong key to decrypt this file.");
-				}
-			}
-			else
-			{
-				System.Windows.MessageBox.Show("Please select an encrypted image to decrypt.");
-			}
-		}
+        #endregion
 
-		private void BtnSelectImage_Click(object sender, RoutedEventArgs e)
-		{
-			var openFileDialog = new System.Windows.Forms.OpenFileDialog();
+        #region Reading
 
-			//openFileDialog.Filter = "Image Files (*.png;)|*.png;";
-			openFileDialog.Filter = "Image Files (*.png;*.jpg;*.jpeg;*.gif)|*.png;*.jpg;*.jpeg;*.gif;";
-			openFileDialog.Title = "Select an image file";
-			
-			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-			{
-				byte[] imageBytes = File.ReadAllBytes(openFileDialog.FileName);
+        private void BtnSelectImage_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new System.Windows.Forms.OpenFileDialog();
 
-				BitmapImage NewImg = new BitmapImage();
-				NewImg.BeginInit();
-				NewImg.CacheOption = BitmapCacheOption.OnLoad;
-				NewImg.StreamSource = new MemoryStream(imageBytes);
-				NewImg.EndInit();
+            //openFileDialog.Filter = "Image Files (*.png;)|*.png;";
+            openFileDialog.Filter = "Image Files (*.png;*.jpg;*.jpeg;*.gif)|*.png;*.jpg;*.jpeg;*.gif;";
+            openFileDialog.Title = "Select an image file";
 
-				PickedImg.Source = NewImg;
-				cryptingAES.ImageEncoded = Convert.ToBase64String(imageBytes);
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                byte[] imageBytes = File.ReadAllBytes(openFileDialog.FileName);
 
-				#region FileName
+                BitmapImage NewImg = new BitmapImage();
+                NewImg.BeginInit();
+                NewImg.CacheOption = BitmapCacheOption.OnLoad;
+                NewImg.StreamSource = new MemoryStream(imageBytes);
+                NewImg.EndInit();
 
-				string filePath = openFileDialog.FileName;
-				int lastSlashIndex = Math.Max(filePath.LastIndexOf('\\'), filePath.LastIndexOf('/'));
-				string result = (lastSlashIndex >= 0) ? filePath.Substring(lastSlashIndex + 1) : filePath;
-				lbImageName.Content = result;
+                PickedImg.Source = NewImg;
+                _cryptingAes.ImageEncoded = Convert.ToBase64String(imageBytes);
 
-				#endregion FileName
+                #region FileName
 
-				Console.WriteLine(cryptingAES.ImageEncoded);
-				ImageSelected = true;
-			}
-			else
-			{
-				Console.WriteLine("No file selected.");
-			}
-		}
+                string filePath = openFileDialog.FileName;
+                int lastSlashIndex = Math.Max(filePath.LastIndexOf('\\'), filePath.LastIndexOf('/'));
+                string result = (lastSlashIndex >= 0) ? filePath.Substring(lastSlashIndex + 1) : filePath;
+                TxtPlainImgName.Text = result;
 
-		private void BtnImgFolder_Click(object sender, RoutedEventArgs e)
-		{
-			var folderDialog = new FolderBrowserDialog();
+                #endregion FileName
 
-			// Display the dialog and await the user's choice
-			DialogResult result = folderDialog.ShowDialog();
+                Console.WriteLine(_cryptingAes.ImageEncoded);
+            }
+            else
+            {
+                Console.WriteLine("No file selected.");
+            }
+        }
 
-			// If the user selects a folder, save its path
-			if (result == System.Windows.Forms.DialogResult.OK)
-			{
-				SelectedPaths.SelectedSaveEncryptFolder = folderDialog.SelectedPath;
-				LbIsImgFolderSelected.Content = "Folder Selected!";
-				LbImgFolder.Content = folderDialog.SelectedPath;
-				LbImgFolder.Visibility = Visibility.Visible;
-				BtnSelectImage.IsEnabled = true;
-				ReadCryptedImg();
+        private void ReadEncryptedImg()
+        {
+            // Clear the list
+            _encryptedImgInfo.Clear();
+            ListDecryptedImgs.ItemsSource = null;
 
-				// Now you can save the selectedFolder path for later use
-				// For example, you can store it in a variable or persist it to a file
-				// Handle the sacred path according to the will of the Omnissiah
-			}
-		}
+            //! Check if the directory exists
+            if (!Directory.Exists(Directories.EncryptFolderPath)) return;
 
-		private void BtnGenerate_Click(object sender, RoutedEventArgs e)
-		{
-			Aes aes = cryptingAES.CreateAES();
-			string aesKey = cryptingAES.ByteArToReadableString(aes.Key);
-			string aesIV = cryptingAES.ByteArToReadableString(aes.IV);
-			string aesName = LblAesName.Text;
+            //Get all the text files in the directory
+            string[] textFiles = Directory.GetFiles(Directories.EncryptFolderPath, "*.txt");
 
-			string folderPath = Path.Combine(SelectedPaths.SelectedKeyFolder, "AES");
-			string filePath = Path.Combine(folderPath, "AESInfo.txt");
+            //Iterate over all the files
+            foreach (var file in textFiles)
+            {
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    string line;
+                    string imgName = null, imgBase64 = null;
 
-			// Check if the folder exists, if not, create it
-			if (!Directory.Exists(folderPath))
-			{
-				Directory.CreateDirectory(folderPath);
-			}
+                    // Read each line and extract the AES information
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (line.StartsWith("Img Name:"))
+                        {
+                            imgName = line.Split(':')[1].Trim();
+                        }
+                        else if (line.StartsWith("AES-Encrypted Image"))
+                        {
+                            imgBase64 = line.Split(':')[1].Trim();
+                        }
+                        else if (string.IsNullOrWhiteSpace(line) && imgBase64 != null && imgName != null)
+                        {
+                            EncryptedImgInfo info = new EncryptedImgInfo()
+                            {
+                                ImgName = imgName,
+                                EncryptedImg = imgBase64,
+                            };
 
-			// Write the AES information to the file
-			using (StreamWriter writer = File.AppendText(filePath))
-			{
-				// Write the AES information as a group of three
-				writer.WriteLine($"AES Name: {aesName}");
-				writer.WriteLine($"AES Key: {aesKey}");
-				writer.WriteLine($"AES IV: {aesIV}");
-				writer.WriteLine(); // Add an empty line to separate groups
-			}
-			ReadAesKeyFromFile();
-		}
+                            _encryptedImgInfo.Add(info);
+                            imgName = imgBase64 = null; // Reset for the next group
+                        }
+                    }
+                }
 
-		private void ReadAesKeyFromFile()
-		{
-			string filePath = Path.Combine(SelectedPaths.SelectedKeyFolder, "Aes/AESInfo.txt");
-			if (File.Exists(filePath))
-			{
-				AesList.Clear();
+                // Create a list of the image names
+                List<string> nameList = new List<string>();
+                foreach (EncryptedImgInfo info in _encryptedImgInfo)
+                {
+                    nameList.Add(info.ImgName);
+                }
 
-				using (StreamReader reader = new StreamReader(filePath))
-				{
-					string line;
-					string aesName = null, aesKey = null, aesIV = null;
+                // Set the list as the source for the ListBox
+                ListDecryptedImgs.ItemsSource = nameList;
+            }
+        }
 
-					// Read each line and extract the AES information
-					while ((line = reader.ReadLine()) != null)
-					{
-						if (line.StartsWith("AES Name:"))
-						{
-							aesName = line.Split(':')[1].Trim();
-						}
-						else if (line.StartsWith("AES Key:"))
-						{
-							aesKey = line.Split(':')[1].Trim();
-						}
-						else if (line.StartsWith("AES IV:"))
-						{
-							aesIV = line.Split(':')[1].Trim();
-						}
-						else if (string.IsNullOrWhiteSpace(line) && aesName != null && aesKey != null && aesIV != null)
-						{
-							AesInfo info = new AesInfo()
-							{
-								AesName = aesName,
-								AesKey = aesKey,
-								AesIV = aesIV
-							};
+        private string GetEncryptedImgName()
+        {
+            if (ListDecryptedImgs.SelectedIndex != -1)
+                return _encryptedImgInfo[ListDecryptedImgs.SelectedIndex].ImgName;
+            return string.Empty;
+        }
 
-							AesList.Add(info);
-							aesName = aesKey = aesIV = null; // Reset for the next group
-						}
-					}
-				}
+        private void ReadAesKeyFromFile()
+        {
+            // Clear the list
+            _aesList.Clear();
+            ListKeys.ItemsSource = null;
 
-				List<string> nameList = new List<string>();
-				foreach (AesInfo aesInfo in AesList)
-				{
-					nameList.Add(aesInfo.AesName);
-				}
-				TxtEncrypt.ItemsSource = nameList;
-			}
-		}
+            if (File.Exists(Path.Combine(Directories.KeyFolderPath, "AESInfo.txt")))
+            {
+                using (StreamReader reader = new StreamReader(Path.Combine(Directories.KeyFolderPath, "AESInfo.txt")))
+                {
+                    string line;
+                    string aesName = null, aesKey = null, aesIV = null;
 
-		private void TxtEncrypt_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (TxtEncrypt.SelectedIndex == -1)
-			{
-				BtnEncryptAESx.IsEnabled = false;
-			}
-			else if (ImageSelected == true)
-			{
-				BtnEncryptAESx.IsEnabled = true;
-			}
-			else
-			{
-				TxtEncrypt.SelectedIndex = -1;
-			}
-		}
+                    // Read each line and extract the AES information
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (line.StartsWith("AES Name:"))
+                        {
+                            aesName = line.Split(':')[1].Trim();
+                        }
+                        else if (line.StartsWith("AES Key:"))
+                        {
+                            aesKey = line.Split(':')[1].Trim();
+                        }
+                        else if (line.StartsWith("AES IV:"))
+                        {
+                            aesIV = line.Split(':')[1].Trim();
+                        }
+                        else if (string.IsNullOrWhiteSpace(line) && aesName != null && aesKey != null && aesIV != null)
+                        {
+                            AesInfo info = new AesInfo()
+                            {
+                                AesName = aesName,
+                                AesKey = aesKey,
+                                AesIV = aesIV
+                            };
 
-		private void TxtDecrypt_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (TxtDecrypt.SelectedIndex == -1)
-			{
-				BtnDecryptAESx.IsEnabled = false;
-			}
-			else
-			{
-				BtnDecryptAESx.IsEnabled = true;
-			}
-		}
-	}
+                            _aesList.Add(info);
+                            aesName = aesKey = aesIV = null; // Reset for the next group
+                        }
+                    }
+                }
+
+                List<string> nameList = new List<string>();
+                foreach (AesInfo aesInfo in _aesList)
+                {
+                    nameList.Add(aesInfo.AesName);
+                }
+
+                ListKeys.ItemsSource = nameList;
+            }
+        }
+
+        #endregion
+
+        #region Writing
+
+        private void SaveDecryptedImg(string decryptedImg)
+        {
+            // Decode the Base64 string to bytes
+            byte[] imageBytes = Convert.FromBase64String(decryptedImg);
+
+            // Create a MemoryStream to hold the image bytes
+            using (MemoryStream ms = new MemoryStream(imageBytes))
+            {
+                // Create an Image from the MemoryStream
+                System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
+
+                //TODO: All Images are saved as PNG by default but images can be selected in different formats.
+                var filePath = Path.Combine(Directories.DecryptedFolderPath,
+                    CheckDefaultImgName.IsChecked == true
+                        ? $"{_decryptedImgName}.png"
+                        : $"{GetEncryptedImgName()}.png");
+
+                // Ensure that directories exist
+                Directories.EnsureDirectoriesExist();
+
+                // Save the image to the specified path
+                image.Save(filePath);
+            }
+        }
+
+        private void SaveEncryptedImg(string EncryptedImg)
+        {
+            //string folderPath = Path.Combine($"{Directories.EncryptFolderPath}\\Encrypted\\");
+            string filePath = Path.Combine(Directories.EncryptFolderPath, $"{_encryptedImgName}.txt");
+
+            Directories.EnsureDirectoriesExist();
+
+            using (StreamWriter writer = File.AppendText(filePath))
+            {
+                // Write the AES information as a group of three
+                writer.WriteLine($"Img Name: {_encryptedImgName}");
+                writer.WriteLine($"AES-Encrypted Image: {EncryptedImg}");
+                writer.WriteLine(); // Add an empty line to separate groups
+            }
+
+            ReadEncryptedImg();
+        }
+
+        #endregion
+
+        #region Assigning
+
+        private void TxtForNames_Click(object sender, MouseButtonEventArgs e)
+        {
+            // Get sender's name as string
+            string senderName = ((TextBlock)sender).Name.ToLower();
+
+            if (senderName.Contains("key")) AssignKeyName();
+            else if (senderName.Contains("encrypt")) AssignEncryptedImgName();
+            else if (senderName.Contains("decrypt")) AssignDecryptedImgName();
+        }
+
+        private void AssignKeyName()
+        {
+            // Open the InputWindow and await the user's input
+            InputWindow inputWindow = new InputWindow();
+            inputWindow.ShowDialog();
+
+            // If the user didn't press OK, return
+            if (!inputWindow.IsOk) return;
+
+            // Set the keyName to the trimmed input text
+            _keyName = inputWindow.InputText.Trim();
+
+            // Display
+            TxtKeyName.Text = string.IsNullOrEmpty(_keyName) ? "Click to Name Key" : _keyName;
+            TxtKeyName.Foreground = string.IsNullOrEmpty(_keyName)
+                ? System.Windows.Media.Brushes.LightSteelBlue
+                : System.Windows.Media.Brushes.White;
+        }
+
+        private void AssignEncryptedImgName()
+        {
+            // Open the InputWindow and await the user's input
+            InputWindow inputWindow = new InputWindow();
+            inputWindow.ShowDialog();
+
+            // If the user didn't press OK, return
+            if (!inputWindow.IsOk) return;
+
+            // Set the img name to the trimmed input text
+            _encryptedImgName = inputWindow.InputText.Trim();
+
+            // Display
+            TxtEncryptedImgName.Text =
+                string.IsNullOrEmpty(_encryptedImgName) ? "Click to Name Image" : _encryptedImgName;
+            TxtEncryptedImgName.Foreground = string.IsNullOrEmpty(_encryptedImgName)
+                ? System.Windows.Media.Brushes.LightSteelBlue
+                : System.Windows.Media.Brushes.White;
+        }
+
+        private void AssignDecryptedImgName()
+        {
+            // Open the InputWindow and await the user's input
+            InputWindow inputWindow = new InputWindow();
+            inputWindow.ShowDialog();
+
+            // If the user didn't press OK, return
+            if (!inputWindow.IsOk) return;
+
+            // Set the img name to the trimmed input text
+            _decryptedImgName = inputWindow.InputText.Trim();
+
+            // Display
+            TxtDecryptedImgName.Text =
+                string.IsNullOrEmpty(_decryptedImgName) ? "Click to Name Image" : _decryptedImgName;
+            TxtDecryptedImgName.Foreground = string.IsNullOrEmpty(_decryptedImgName)
+                ? System.Windows.Media.Brushes.LightSteelBlue
+                : System.Windows.Media.Brushes.White;
+        }
+
+        #endregion
+
+        private void Checkbox_click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        #region Checkups
+
+        private bool IsOkToEncrypt()
+        {
+            //! If no image is selected, return
+            if (_cryptingAes.ImageEncoded == null)
+            {
+                System.Windows.MessageBox.Show("Please select an image to encrypt", "No Image", MessageBoxButton.OK,
+                    MessageBoxImage.Asterisk);
+                return false;
+            }
+
+            //! If no key is selected, return
+            if (ListKeys.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Please select a key to encrypt the image with.", "No Key",
+                    MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                return false;
+            }
+
+            // Is there an image name given?
+            if (string.IsNullOrEmpty(_encryptedImgName))
+            {
+                //? Ask if user wants to name the image now.
+                var result = MessageBox.Show(
+                    "No name for the to-be-encrypted image was given. Would you like to name it now?",
+                    "Nameless image?",
+                    MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                //! If user doesn't want to name the image now, return.
+                if (result == MessageBoxResult.No) return false;
+
+                //> Else, open the InputWindow and await the user's input
+                AssignEncryptedImgName();
+
+                //! If the user still didn't give a name, return. (Not again.. :\ )
+                if (string.IsNullOrEmpty(_encryptedImgName)) return false;
+            }
+
+            // Green light
+            return true;
+        }
+
+        private bool IsOkToDecrypt()
+        {
+            //! Return if no image is selected
+            if (ListDecryptedImgs.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Please select an encrypted image to decrypt.", "Imageless...",
+                    MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                return false;
+            }
+
+            //! Return if no key is selected
+            if (ListKeys.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Please select a key to decrypt the image with.", "Keyless...",
+                    MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                return false;
+            }
+
+            //! Return if no custom name was given even when prompted
+            if (CheckDefaultImgName.IsChecked == true && _decryptedImgName == string.Empty)
+            {
+                MessageBox.Show("Please give a name to the decrypted image.", "Nameless Image",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            // Green light
+            return true;
+        }
+
+        #endregion
+    }
 }

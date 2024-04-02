@@ -15,7 +15,7 @@ namespace EncryptieTool.Views
 
         private void AES_Click(object sender, RoutedEventArgs e)
         {
-            // if (string.IsNullOrEmpty(SelectedPaths.SelectedKeyFolder))
+            // if (string.IsNullOrEmpty(Directories.SelectedKeyFolder))
             // {
             //     System.Windows.MessageBox.Show("Selecteer eerst een map om de AES keys in op te slaan.",
             //         "Geen map geselecteerd", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -47,7 +47,7 @@ namespace EncryptieTool.Views
             // If the user selects a folder, save its path
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                SelectedPaths.SelectedKeyFolder = folderDialog.SelectedPath;
+                Directories.KeyFolderPath = folderDialog.SelectedPath;
                 //LbIsFolderSelected.Content = "Folder Selected!";
                 //LbFolder.Content = folderDialog.SelectedPath;
                 //LbFolder.Visibility = Visibility.Visible;

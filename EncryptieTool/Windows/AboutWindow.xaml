@@ -17,7 +17,7 @@
     </Window.Resources>
     <DockPanel Height="300" Width="440" Background="GhostWhite">
         <!-- Image -->
-        <Image Source="../Images/Icons/user_manual_bigger.png" 
+        <Image Source="../Images/Icons/sticky_notes.png" Stretch="Uniform" 
                Width="120" Margin="8 8 4 8"/>
         
         <!-- Text -->

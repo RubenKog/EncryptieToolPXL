@@ -4,46 +4,70 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" SizeToContent="WidthAndHeight"
-        Title="Encryption Tool" Height="Auto" Width="Auto" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
-    <DockPanel Height="420" Width="600">
+        Title="Encryption Tool" Height="Auto" Width="Auto" WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize">
+    <DockPanel Height="550" Width="664">
         <!-- Header -->
         <Menu DockPanel.Dock="Top" FontWeight="SemiBold">
             <Menu.Background>
                 <ImageBrush ImageSource="../Images/Backgrounds/bg-blue_red_gradient.jpg" Opacity="0.2"></ImageBrush>
             </Menu.Background>
-            <MenuItem Header="File">
-                <MenuItem Header="Select Main Folder"></MenuItem>
+            <MenuItem Header="Back" Click="BackItemClick" Cursor="Hand">
+                <MenuItem.Icon>
+                    <Image Source="../Images/Icons/back_arrow.png" />
+                </MenuItem.Icon>
             </MenuItem>
+            <MenuItem Header="Refresh" Click="RefreshItemClick" Cursor="Hand">
+                <MenuItem.Icon>
+                    <Image Source="../Images/Icons/refresh.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <!-- Folders -->
+            <MenuItem Header="Directories">
+                <MenuItem.Icon>
+                    <Image Source="../Images/Icons/folder_red.png" />
+                </MenuItem.Icon>
+                <MenuItem Tag="Encrypt" Header="Select Encrypt Folder" Click="SelectPathClick" />
+                <MenuItem Tag="Decrypt" Header="Select Decrypt Folder" Click="SelectPathClick" />
+                <MenuItem Tag="Key" Header="Select Key Folder" Click="SelectPathClick" />
+                <MenuItem Header="View Folders" Click="PathDetailsClick" />
+            </MenuItem>
+            <!-- Navigation || Not really necessary anymore with the <Back> and <Refresh> buttons being enough. -->
             <MenuItem Header="Navigate">
-                <MenuItem Tag="MainView" Header="Home" Click="NavMenuItem_Click"/>
-                <MenuItem Tag="AesView" Header="Aes" Click="NavMenuItem_Click"/>
-                <MenuItem Tag="RsaView" Header="Rsa" Click="NavMenuItem_Click"/>
+                <MenuItem.Icon>
+                    <Image Source="../Images/Icons/navigation.png" />
+                </MenuItem.Icon>
+                <MenuItem Tag="MainView" Header="Home" Click="NavMenuItem_Click" />
+                <MenuItem Tag="AesView" Header="Aes" Click="NavMenuItem_Click" />
+                <MenuItem Tag="RsaView" Header="Rsa" Click="NavMenuItem_Click" />
+                <MenuItem Header="Display Navigation UI" Click="DisplayUIClick"
+                          IsCheckable="True" IsChecked="False" />
             </MenuItem>
         </Menu>
-        
+
         <!-- Footer -->
         <StatusBar DockPanel.Dock="Bottom" FontFamily="Consolas">
             <!-- Background -->
             <StatusBar.Background>
-                <ImageBrush ImageSource="../Images/Backgrounds/bg-blue_red_gradient.jpg" Opacity="0.1"/>
+                <ImageBrush ImageSource="../Images/Backgrounds/bg-blue_red_gradient.jpg" Opacity="0.1" />
             </StatusBar.Background>
-            
+
             <!-- Items -->
             <StatusBarItem Margin="4 0" BorderBrush="LightGray" BorderThickness="0 0 1 0">
                 <DockPanel>
-                    <Image Source="../Images/Icons/check.png" Height="16"/>
-                    <TextBlock Text="Faultless Defence" Margin="4 0"/>
+                    <Image Source="../Images/Icons/check.png" Height="16" />
+                    <TextBlock Text="Faultless Defence" Margin="4 0" />
                 </DockPanel>
             </StatusBarItem>
             <StatusBarItem Margin="4 0" BorderBrush="LightGray" BorderThickness="0 0 1 0">
                 <DockPanel>
-                    <Image Source="../Images/Icons/cake.png" Height="16"/>
-                    <TextBlock Text="App Version: CakeLake v1.0" Margin="4 0"/>
+                    <Image Source="../Images/Icons/cake.png" Height="16" />
+                    <TextBlock Text="App Version: CakeLake v1.0" Margin="4 0" />
                 </DockPanel>
             </StatusBarItem>
             <StatusBarItem Margin="4 0" BorderBrush="LightGray" BorderThickness="0 0 1 0">
                 <DockPanel>
-                    <Image Source="../Images/Icons/user_manual.png" Height="16"/>
+                    <Image Source="../Images/Icons/user_manual.png" Height="16" />
                     <TextBlock Margin="4 0">
                         <Hyperlink NavigateUri="AboutWindow.xaml" RequestNavigate="About_Hyperlink">
                             About Us
@@ -55,7 +79,7 @@
 
         <!-- Body -->
         <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden">
-            
+
         </Frame>
     </DockPanel>
 </Window>
