@@ -25,8 +25,6 @@ namespace KeysLibrary
                         {
                             // Compute the hash of the fileStream.
                             byte[] hashValue = mySHA256.ComputeHash(fileStream);
-                            // Write the name and hash value of the file to the console.
-                            Console.Write($"{Path.GetFileName(filePath)}: ");
                             return hashValue;
                         }
                     }
@@ -34,24 +32,9 @@ namespace KeysLibrary
                     {
                         return null;
                     }
-
-
-
                 }
-
-
-
             }
-            return null;
-            
+            return null;            
         }
-
-
-
-
-
-
-
-
     }
 }
