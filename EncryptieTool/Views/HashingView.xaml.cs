@@ -33,38 +33,46 @@ namespace EncryptieTool.Views
 
         private void BtnValidate_Click(object sender, RoutedEventArgs e)
         {
-            Hashing hashing = new Hashing();
-            byte[] SHA256File1 = hashing.FileToHash(File1);
-            byte[] SHA256File2 = hashing.FileToHash(File2);
-            string SHA256String1 = Convert.ToBase64String(SHA256File1);
-            string SHA256String2 = Convert.ToBase64String(SHA256File2);
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Checking integrity through SHA256 hash:");
-            if (SHA256File1 == null || SHA256File2 == null)
+            try
+            {
+                Hashing hashing = new Hashing();
+                byte[] SHA256File1 = hashing.FileToHash(File1);
+                byte[] SHA256File2 = hashing.FileToHash(File2);
+                string SHA256String1 = Convert.ToBase64String(SHA256File1);
+                string SHA256String2 = Convert.ToBase64String(SHA256File2);
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("Checking integrity through SHA256 hash:");
+                if (SHA256File1 == null || SHA256File2 == null)
+                {
+                    MessageBox.Show("Please select two files.");
+                }
+                else if (SHA256File1 != null && SHA256File2 != null && SHA256String1 == SHA256String2)
+                {
+                    sb.AppendLine("");
+                    sb.AppendLine($"File 1 hash: {SHA256String1}");
+                    sb.AppendLine("");
+                    sb.AppendLine($"File 2 hash: {SHA256String2}");
+                    sb.AppendLine("");
+                    sb.AppendLine("Integrity check complete: Success!");
+                    MessageBox.Show(sb.ToString(), "Ontegrity Checker");
+                }
+                else
+                {
+                    sb.AppendLine("");
+                    sb.AppendLine($"File 1 hash: {SHA256String1}");
+                    sb.AppendLine("");
+                    sb.AppendLine($"File 2 hash: {SHA256String2}");
+                    sb.AppendLine("");
+                    sb.AppendLine("Integrity check complete: Failure!");
+                    MessageBox.Show(sb.ToString(), "Integrity Checker");
+                }
+                sb.Clear();
+            }
+            catch
             {
                 MessageBox.Show("Please select two files.");
             }
-            else if (SHA256File1 != null && SHA256File2 != null && SHA256String1 == SHA256String2)
-            {
-                sb.AppendLine("");
-                sb.AppendLine($"File 1 hash: {SHA256String1}");
-                sb.AppendLine("");
-                sb.AppendLine($"File 2 hash: {SHA256String2}");
-                sb.AppendLine("");
-                sb.AppendLine("Integrity check complete: Success!");
-                MessageBox.Show(sb.ToString(), "Ontegrity Checker");
-            }            
-            else
-            {
-                sb.AppendLine("");
-                sb.AppendLine($"File 1 hash: {SHA256String1}");
-                sb.AppendLine("");
-                sb.AppendLine($"File 2 hash: {SHA256String2}");
-                sb.AppendLine("");
-                sb.AppendLine("Integrity check complete: Failure!");
-                MessageBox.Show(sb.ToString(), "Integrity Checker");
-            }
-            sb.Clear();
+           
 
         }
 

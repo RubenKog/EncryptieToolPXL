@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:EncryptieTool.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="HashingView">
+      Title="Integrity Checker">
 
     <Grid Height="auto" Width="auto" d:DesignWidth="500" d:DesignHeight="460">
         <Grid.RowDefinitions>
@@ -44,10 +44,7 @@
                         <Button Name="BtnSelectFile1" Margin="4" Content="📂 Browse" Click="BtnSelectFile1_Click"
             Style="{StaticResource ButtonLight}" />
                     </StackPanel>
-                    <Border BorderBrush="#222831" BorderThickness="1" CornerRadius="2" Margin="10" 
-VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <Border BorderBrush="#222831" BorderThickness="1" CornerRadius="2" Margin="10" 
-VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    
                     <StackPanel VerticalAlignment="Center">
                         <!-- Title -->
                         <TextBlock Text="File 2" FontSize="28" FontWeight="SemiBold" TextAlignment="Center" Foreground="White"
