@@ -72,5 +72,8 @@
                         Click="RSA_Click" />
             </StackPanel>
         </Border>
+        <Button Name="BtnValidity" Style="{StaticResource ButtonAqua}"
+        Content="Check File Validity" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Top"
+        Click="BtnValidity_Click"  Grid.Row="0" Grid.Column="1" Width="10"/>
     </Grid>
 </Page>

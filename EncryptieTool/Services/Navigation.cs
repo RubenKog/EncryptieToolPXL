@@ -16,7 +16,8 @@ namespace EncryptieTool.Services
         {
             { "MainView", new MainView() },
             { "RsaView", new RsaView() },
-            { "AesView", new AesView() }
+            { "AesView", new AesView() },
+            { "HashingView", new HashingView() }
         };
 
         #endregion
@@ -62,7 +63,7 @@ namespace EncryptieTool.Services
             AppPages["MainView"] = new MainView();
             AppPages["RsaView"] = new RsaView();
             AppPages["AesView"] = new AesView();
-            
+            AppPages["HashingView"] = new AesView();
             //Refresh
             RefreshPage();
         }

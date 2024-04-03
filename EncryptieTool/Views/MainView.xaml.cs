@@ -56,5 +56,10 @@ namespace EncryptieTool.Views
                 // Handle the sacred path according to the will of the Omnissiah
             }
         }
+
+        private void BtnValidity_Click(object sender, RoutedEventArgs e)
+        {
+            Navigation.Navigate("HashingView");
+        }
     }
 }

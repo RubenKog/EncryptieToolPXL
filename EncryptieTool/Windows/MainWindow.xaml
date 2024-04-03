@@ -40,6 +40,7 @@
                 <MenuItem Tag="MainView" Header="Home" Click="NavMenuItem_Click" />
                 <MenuItem Tag="AesView" Header="Aes" Click="NavMenuItem_Click" />
                 <MenuItem Tag="RsaView" Header="Rsa" Click="NavMenuItem_Click" />
+                <MenuItem Tag="HashingView" Header="Validity" Click="NavMenuItem_Click" />
                 <MenuItem Header="Display Navigation UI" Click="DisplayUIClick"
                           IsCheckable="True" IsChecked="False" />
             </MenuItem>

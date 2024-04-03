@@ -54,6 +54,7 @@
     <Compile Include="CryptingAES.cs" />
     <Compile Include="CryptingRsa.cs" />
     <Compile Include="EncryptedImgInfo.cs" />
+    <Compile Include="Hashing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Directories.cs" />
   </ItemGroup>

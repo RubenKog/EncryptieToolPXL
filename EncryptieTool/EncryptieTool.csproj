@@ -71,6 +71,9 @@
     <Compile Include="Views\AesView.xaml.cs">
       <DependentUpon>AesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\HashingView.xaml.cs">
+      <DependentUpon>HashingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,10 @@
       <DependentUpon>PathDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\AesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HashingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
