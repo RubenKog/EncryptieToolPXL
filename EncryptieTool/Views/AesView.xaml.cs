@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using EncryptieTool.Windows;
 using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
+using System.Diagnostics;
 
 namespace EncryptieTool.Views
 {
@@ -33,7 +34,8 @@ namespace EncryptieTool.Views
         private string _decryptedImgName = string.Empty; //Name for the image that is being decrypted
 
         #endregion
-
+        public bool OpenFolder { get; set; }
+        public string filePathA { get; set; }
         public AesView()
         {
             InitializeComponent();
@@ -161,8 +163,25 @@ namespace EncryptieTool.Views
                 int indexPickedImg = ListDecryptedImgs.SelectedIndex;
                 SaveDecryptedImg(_cryptingAes.Decrypt(_encryptedImgInfo[indexPickedImg].EncryptedImg,
                     _aesList[indexPickedAes]));
+
+
+                if (OpenFolder == true)
+                {
+                    string directoryPath = Path.GetDirectoryName(filePathA);
+
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        Arguments = directoryPath,
+                        FileName = "explorer.exe"
+                    };
+
+                    Process.Start(startInfo);
+                }
+
+
+
                 System.Windows.MessageBox.Show("Decryption successful, image saved!", "Success",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
+    MessageBoxButton.OK, MessageBoxImage.Information);
 
                 // Clear the name
                 _decryptedImgName = string.Empty;
@@ -362,6 +381,7 @@ namespace EncryptieTool.Views
                         ? $"{_decryptedImgName}.png"
                         : $"{GetEncryptedImgName()}.png");
 
+                filePathA = filePath;
                 // Ensure that directories exist
                 Directories.EnsureDirectoriesExist();
 
@@ -550,9 +570,14 @@ namespace EncryptieTool.Views
             TxtDecryptedImgName.Visibility = Visibility.Collapsed;
         }
 
-        private void CheckOpenFolder_Click(object sender, RoutedEventArgs e)
+        private void CheckOpenFolder_Checked(object sender, RoutedEventArgs e)
         {
+            OpenFolder = true;
+        }
 
+        private void CheckOpenFolder_Unchecked(object sender, RoutedEventArgs e)
+        {
+            OpenFolder = false;
         }
     }
 }

@@ -85,8 +85,8 @@
                     <Border.Background>
                         <SolidColorBrush Color="White" Opacity="0.2"></SolidColorBrush>
                     </Border.Background>
-                    <CheckBox x:Name="CheckOpenFolder" Content="Assign Folder" Click="CheckOpenFolder_Click" 
-                              Foreground="White" FontSize="13" IsChecked="True"/>
+                    <CheckBox x:Name="CheckOpenFolder" Content="Open folder when done" Checked="CheckOpenFolder_Checked" Unchecked="CheckOpenFolder_Unchecked" 
+                              Foreground="White" FontSize="13" IsChecked="False"/>
                 </Border>
                 <TextBlock x:Name="TxtDecryptedImgName" Text="Click to name image" MouseUp="TxtForNames_Click" Cursor="Hand"
                            FontSize="14" Foreground="LightSteelBlue" HorizontalAlignment="Stretch" TextAlignment="Center"
