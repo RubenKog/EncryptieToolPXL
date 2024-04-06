@@ -463,9 +463,7 @@ namespace EncryptieTool.Views
 
         #endregion
 
-        private void Checkbox_click(object sender, RoutedEventArgs e)
-        {
-        }
+
 
         #region Checkups
 
@@ -541,5 +539,20 @@ namespace EncryptieTool.Views
         }
 
         #endregion
+
+        private void CheckDefaultImgName_Checked(object sender, RoutedEventArgs e)
+        {
+            TxtDecryptedImgName.Visibility = Visibility.Visible;
+        }
+
+        private void CheckDefaultImgName_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TxtDecryptedImgName.Visibility = Visibility.Collapsed;
+        }
+
+        private void CheckOpenFolder_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

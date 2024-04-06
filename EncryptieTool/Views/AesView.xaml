@@ -69,17 +69,28 @@
                 <TextBlock Text="Select an Image to Decrypt:" Foreground="White" FontStyle="Italic" Margin="4"/>
                 
                 <!--Listbox for decrypted images-->
-                <ListBox x:Name="ListDecryptedImgs" Margin="4" MaxHeight="124"
+                <ListBox x:Name="ListDecryptedImgs" Margin="4" MinHeight="20px" MaxHeight="124"
                          Style="{StaticResource ListboxMagenta}" ItemContainerStyle="{StaticResource ListboxItemMagenta}" />
                 
                 <!-- Options -->
                 <Border BorderBrush="Transparent" BorderThickness="1" CornerRadius="2" Margin="4 6" Padding="4 2">
-                    <Border.Background><SolidColorBrush Color="White" Opacity="0.2"></SolidColorBrush></Border.Background>
-                    <CheckBox x:Name="CheckDefaultImgName" Content="Assign Custom Name" Click="Checkbox_click" 
+                    <Border.Background>
+                        <SolidColorBrush Color="White" Opacity="0.2"></SolidColorBrush>
+                    </Border.Background>
+                    <CheckBox x:Name="CheckDefaultImgName" Content="Assign Custom Name" IsChecked="False" Checked="CheckDefaultImgName_Checked"
+                              Unchecked="CheckDefaultImgName_Unchecked"
+                              Foreground="White" FontSize="13" />
+                </Border>
+                <Border BorderBrush="Transparent" BorderThickness="1" CornerRadius="2" Margin="4 6" Padding="4 2">
+                    <Border.Background>
+                        <SolidColorBrush Color="White" Opacity="0.2"></SolidColorBrush>
+                    </Border.Background>
+                    <CheckBox x:Name="CheckOpenFolder" Content="Assign Folder" Click="CheckOpenFolder_Click" 
                               Foreground="White" FontSize="13" IsChecked="True"/>
                 </Border>
                 <TextBlock x:Name="TxtDecryptedImgName" Text="Click to name image" MouseUp="TxtForNames_Click" Cursor="Hand"
                            FontSize="14" Foreground="LightSteelBlue" HorizontalAlignment="Stretch" TextAlignment="Center"
+                           Visibility="Collapsed"
                            Padding="4 2" Margin="0 0 0 4"
                            ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
                            IsEnabled="{Binding IsChecked, ElementName=CheckDefaultImgName}">
