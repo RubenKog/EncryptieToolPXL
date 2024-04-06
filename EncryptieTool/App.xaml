@@ -257,6 +257,7 @@
             <Setter Property="Foreground" Value="#EEEEEE" />
         </Style>
 
+        
         <!-- Listbox Item -->
         <!-- Magenta -->
         <Style TargetType="ListBoxItem" x:Key="ListboxItemMagenta">
