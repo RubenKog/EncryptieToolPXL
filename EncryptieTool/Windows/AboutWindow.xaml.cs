@@ -14,17 +14,15 @@ namespace EncryptieTool
         
         List<string> sites = new List<string>
         {
-            "https://www.ishetalvrijdag.nl/",
-            "https://www.ishetalweekend.nl/",
-            "https://www.ishetal5uur.nl/",
-            "https://www.hoelaatwordthetdonker.nl/",
-            "https://www.hoeheetishet.nl/",
-            "https://www.watbenjedan.nl/",
-            "https://www.watbenjedan.xyz/",
-            "https://www.enwatbenjedan.nl/",
-            "https://www.youtube.com/watch?v=hiRacdl02w4",
-            "https://www.youtube.com/watch?v=hiRacdl02w4",
-            "https://www.youtube.com/watch?v=hiRacdl02w4",
+            "https://theuselessweb.com/",
+            "https://hackertyper.com/",
+            "https://pointerpointer.com/",
+            "https://tholman.com/cursor-effects/",
+            "https://www.boredbutton.com/",
+            "https://www.agegeek.com/",
+            "https://screamintothevoid.com/",
+            "http://dontevenreply.com/",
+            "https://stellarium-web.org/",
         };
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)

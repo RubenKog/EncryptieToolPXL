@@ -164,12 +164,10 @@
     <Resource Include="Images\Icons\check.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\Icons\Image_Encrypted.jpg" />
     <Resource Include="Images\Icons\warning.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Image_Encrypted.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Backgrounds\bg-blue_red_gradient.jpg">

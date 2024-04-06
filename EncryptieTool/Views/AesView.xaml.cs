@@ -17,9 +17,6 @@ using System.Diagnostics;
 
 namespace EncryptieTool.Views
 {
-    /// <summary>
-    /// Interaction logic for AesView.xaml
-    /// </summary>
     public partial class AesView : Page
     {
         #region Properties
@@ -32,10 +29,12 @@ namespace EncryptieTool.Views
         private string _keyName = string.Empty;
         private string _encryptedImgName = string.Empty; //Name for the image that is being encrypted
         private string _decryptedImgName = string.Empty; //Name for the image that is being decrypted
+        
+        bool OpenFolder { get; set; }
+        string filePathA { get; set; }
 
         #endregion
-        public bool OpenFolder { get; set; }
-        public string filePathA { get; set; }
+
         public AesView()
         {
             InitializeComponent();
@@ -62,6 +61,26 @@ namespace EncryptieTool.Views
             TxtKeyName.Text = "Click to Name Key";
             TxtKeyName.Foreground = System.Windows.Media.Brushes.LightSteelBlue;
         }
+        
+        private void CheckDefaultImgName_Checked(object sender, RoutedEventArgs e)
+        {
+            TxtDecryptedImgName.Visibility = Visibility.Visible;
+        }
+
+        private void CheckDefaultImgName_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TxtDecryptedImgName.Visibility = Visibility.Collapsed;
+        }
+
+        private void CheckOpenFolder_Checked(object sender, RoutedEventArgs e)
+        {
+            OpenFolder = true;
+        }
+
+        private void CheckOpenFolder_Unchecked(object sender, RoutedEventArgs e)
+        {
+            OpenFolder = false;
+        }
 
         #endregion
 
@@ -80,18 +99,19 @@ namespace EncryptieTool.Views
                 SaveEncryptedImg(_cryptingAes.Encrypt(_cryptingAes.ImageEncoded, _aesList[IndexPicked]));
                 System.Windows.MessageBox.Show("Encryption successful, image saved!", "Success",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-                
+
                 // Clear the name
                 _encryptedImgName = string.Empty;
                 TxtEncryptedImgName.Text = "Click to Name Image";
                 TxtEncryptedImgName.Foreground = System.Windows.Media.Brushes.LightSteelBlue;
-                
+
                 // Unselect Items in listbox'
                 ListKeys.SelectedIndex = -1;
             }
-            catch
+            catch (CryptographicException ex)
             {
-                System.Windows.MessageBox.Show("Oops, something went wrong.");
+                System.Windows.MessageBox.Show("Oops, something went wrong.\n" +
+                                               ex.Message, "Hmm 🤨", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -179,9 +199,8 @@ namespace EncryptieTool.Views
                 }
 
 
-
                 System.Windows.MessageBox.Show("Decryption successful, image saved!", "Success",
-    MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBoxButton.OK, MessageBoxImage.Information);
 
                 // Clear the name
                 _decryptedImgName = string.Empty;
@@ -192,11 +211,12 @@ namespace EncryptieTool.Views
                 ListDecryptedImgs.SelectedIndex = -1;
                 ListKeys.SelectedIndex = -1;
             }
-            catch
+            catch (CryptographicException ex)
             {
                 System.Windows.MessageBox.Show(
-                    "Something went wrong while decrypting the image. Are you sure you selected the right key?",
-                    "🤨",
+                    $"Something went wrong while decrypting the image. Are you sure you selected the right key?\n" +
+                    $"{ex.Message}",
+                    "Hmm 🤨",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -483,8 +503,6 @@ namespace EncryptieTool.Views
 
         #endregion
 
-
-
         #region Checkups
 
         private bool IsOkToEncrypt()
@@ -559,25 +577,5 @@ namespace EncryptieTool.Views
         }
 
         #endregion
-
-        private void CheckDefaultImgName_Checked(object sender, RoutedEventArgs e)
-        {
-            TxtDecryptedImgName.Visibility = Visibility.Visible;
-        }
-
-        private void CheckDefaultImgName_Unchecked(object sender, RoutedEventArgs e)
-        {
-            TxtDecryptedImgName.Visibility = Visibility.Collapsed;
-        }
-
-        private void CheckOpenFolder_Checked(object sender, RoutedEventArgs e)
-        {
-            OpenFolder = true;
-        }
-
-        private void CheckOpenFolder_Unchecked(object sender, RoutedEventArgs e)
-        {
-            OpenFolder = false;
-        }
     }
 }

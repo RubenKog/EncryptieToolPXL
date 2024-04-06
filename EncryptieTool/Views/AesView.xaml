@@ -110,7 +110,7 @@
                 <!-- Image -->
                 <Border BorderBrush="#222831" BorderThickness="1" CornerRadius="2" Margin="0 0 12 0" 
                         VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Image Name="PickedImg" Height="120" Width="120" Source="../Images/Image_Encrypted.jpg"
+                    <Image Name="PickedImg" Height="120" Width="120" Source="../Images/Icons/Image_Encrypted.jpg"
                            Stretch="UniformToFill" />
                 </Border>
                 <!-- Body -->

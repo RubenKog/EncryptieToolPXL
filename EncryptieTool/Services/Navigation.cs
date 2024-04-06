@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 using EncryptieTool.Views;
 
 namespace EncryptieTool.Services
@@ -12,7 +13,7 @@ namespace EncryptieTool.Services
 
         private static Frame MainFrame;
 
-        private static readonly Dictionary<string, Page> AppPages = new Dictionary<string, Page>
+        private static Dictionary<string, Page> AppPages = new Dictionary<string, Page>
         {
             { "MainView", new MainView() },
             { "RsaView", new RsaView() },
@@ -43,8 +44,7 @@ namespace EncryptieTool.Services
                 throw new Exception("Main Frame is not set.");
 
             //! Cancel if we're already on that page
-            if (AlreadyThere(pageName))
-                return;
+            if (AlreadyThere(pageName)) return;
 
             //> Navigate to the selected page
             MainFrame.Content = AppPages[pageName];
@@ -53,8 +53,7 @@ namespace EncryptieTool.Services
         public static void GoBack()
         {
             //> Go back one page in the main frame
-            if (MainFrame.CanGoBack)
-                MainFrame.GoBack();
+            if (MainFrame.CanGoBack) MainFrame.GoBack();
         }
 
         public static void ReloadPages()
@@ -63,7 +62,7 @@ namespace EncryptieTool.Services
             AppPages["MainView"] = new MainView();
             AppPages["RsaView"] = new RsaView();
             AppPages["AesView"] = new AesView();
-            AppPages["HashingView"] = new AesView();
+            AppPages["HashingView"] = new HashingView();
             //Refresh
             RefreshPage();
         }
@@ -76,12 +75,8 @@ namespace EncryptieTool.Services
         private static bool AlreadyThere(string pageName)
         {
             //< Get Current Page
-            Page currentPage = MainFrame.Content as Page;
-
             //? Check if page title and page name match
-            if (currentPage != null && currentPage.Title == pageName)
-                return true;
-            return false;
+            return MainFrame.Content is Page currentPage && currentPage.Title == pageName;
         }
     }
 }
