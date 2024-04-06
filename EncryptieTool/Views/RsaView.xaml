@@ -6,35 +6,91 @@
         xmlns:local="clr-namespace:EncryptieTool.Views"
         mc:Ignorable="d"
         Title="RsaView" Height="auto" Width="auto">
-    <Grid>
+    <Grid Height="auto" Width="auto" d:DesignWidth="500" d:DesignHeight="460">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.Background>
-            <ImageBrush ImageSource="../Images/Backgrounds/blue.png" />
+            <ImageBrush ImageSource="../Images/Backgrounds/3blue.png" />
         </Grid.Background>
 
-        <Label Content="RSA" Grid.Column="1" Grid.Row="1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Height="37" Width="48"></Label>
-        <Label Content="Gebruik RSA Sleutel" Grid.Row="2" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Height="36" Width="198" />
-        <Label Content="Laad AES keys" Grid.Column="2" Grid.Row="2" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Height="36" Width="143" />
-        <Label Content="Encrypteer en Sla Op" Grid.Column="1" Grid.Row="4" FontSize="20" Margin="0,35,0,0" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Height="37" Width="206" />
+        <!-- Encrypt Container -->
+        <Border Grid.Row="1" Style="{StaticResource ContainerDBlue}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel VerticalAlignment="Top">
+                <!-- Title -->
+                <TextBlock Text="AES keys from file:" Foreground="White" FontStyle="Italic" Margin="0 0 0 4" />
+                <ListBox Name="LstAesKeys" FontSize="14" BorderThickness="0" Foreground="White"
+                         MinHeight="200px" Margin="2" >
+                    <ListBox.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.35"/>
+                    </ListBox.Background>
+                </ListBox>
+                
+                <!-- Encrypt -->
+                <TextBox Name="TxtImgName" Text="[Image Name]" TextAlignment="Center" Visibility="Collapsed"/>
+                <Button Name="BtnEncryptAndSave" Margin="4" Style="{StaticResource ButtonAqua}"
+                        Content="Encrypt and Save" Click="BtnEncryptAndSave_Click" />
 
-        <ListBox Name="LstAesKeys" Grid.Column="1" Grid.Row="3" Margin="10,10,10,10" />
 
-        <Label Content="AES Sleutel" Grid.Row="4" FontSize="20" Margin="0,35,0,0"  FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Height="37" Width="115" />
-        <TextBox Name="TxtDecryptedAES" Grid.Column="0" Grid.Row="4" Margin="20,86,20,25" />
+            </StackPanel>
+        </Border>
 
-        <Button Name="BtnUseRSA" Grid.Column="0" Grid.Row="3" Margin="30,35,30,35" Content="Gebruik Sleutel" Background="Black" Foreground="White" Click="BtnUseRSA_Click" />
-        <Button Name="BtnSelectAESFile" Grid.Column="2" Grid.Row="3" Margin="30,30,30,30" Content="Selecteer AESInfo Bestand" Background="Black" Foreground="White" Click="BtnSelectAESFile_Click" />
-        <Button Name="BtnEncryptAndSave" Grid.Column="1" Grid.Row="4" Margin="39,76,39,15" Content="Encrypteer en Sla Op" Background="Black" Foreground="White" Click="BtnEncryptAndSave_Click" />
+        <!-- Decrypt -->
+        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource ContainerDBlue}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel VerticalAlignment="Top">
+                <!-- Title -->
+                <TextBlock Text="Select AES Key:" Foreground="White" FontStyle="Italic" Margin="0 0 0 4" />
+                <Button Name="BtnUseRSA" Margin="4" Content="📂 Browse" Click="BtnUseRSA_Click"
+                            Style="{StaticResource ButtonLight}" />
+                
+
+
+                <TextBlock Text="Decrypted AES:" Foreground="White" FontStyle="Italic" Margin="0 0 0 4" />
+                <TextBlock x:Name="TxtDecryptedAES"
+                           FontSize="14" Foreground="LightSteelBlue" HorizontalAlignment="Stretch" TextAlignment="Center"
+                           Padding="4 2" Margin="0 0 0 4">
+                    <TextBlock.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.75" />
+                    </TextBlock.Background>
+                </TextBlock>
+
+            </StackPanel>
+        </Border>
+
+        <!-- Image -->
+        <Border Grid.ColumnSpan="2" Style="{StaticResource ContainerDark}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <DockPanel>
+                <!-- Image -->
+                <Border BorderBrush="#222831" BorderThickness="1" CornerRadius="2" Margin="0 0 12 0" 
+                        VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Image Name="PickedImg" Height="120" Width="120" Source="../Images/Image_Encrypted.jpg"
+                           Stretch="UniformToFill" />
+                </Border>
+                <!-- Body -->
+                <StackPanel VerticalAlignment="Center">
+                    <!-- Title -->
+                    <TextBlock Text="RSA" FontSize="28" FontWeight="SemiBold" TextAlignment="Center" Foreground="White"
+                               Margin="0 0 0 10" />
+
+                    <TextBlock Text="Select AESinfo file:" Foreground="White" FontStyle="Italic" Margin="0 0 0 4" />
+                    <Button Name="BtnSelectAESFile" Margin="4" Content="📂 Browse" Click="BtnSelectAESFile_Click"
+                            Style="{StaticResource ButtonLight}" />
+                    
+
+
+
+
+                </StackPanel>
+            </DockPanel>
+        </Border>
     </Grid>
+
 </Page>

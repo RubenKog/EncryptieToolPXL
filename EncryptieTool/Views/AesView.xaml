@@ -15,11 +15,11 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.Background>
-            <ImageBrush ImageSource="../Images/Backgrounds/bg-red_gradient.jpg" />
+            <ImageBrush ImageSource="../Images/Backgrounds/3red.png" />
         </Grid.Background>
 
         <!-- Encrypt Container -->
-        <Border Grid.Row="1" Style="{StaticResource ContainerMagenta}"
+        <Border Grid.Row="1" Style="{StaticResource ContainerDRed}"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <StackPanel VerticalAlignment="Top">
                 <!-- Title -->
@@ -60,7 +60,7 @@
         </Border>
 
         <!-- Decrypt -->
-        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource ContainerAqua}"
+        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource ContainerDRed}"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <StackPanel VerticalAlignment="Top">
                 <!-- Title -->
@@ -70,7 +70,7 @@
                 
                 <!--Listbox for decrypted images-->
                 <ListBox x:Name="ListDecryptedImgs" Margin="4" MaxHeight="124"
-                         Style="{StaticResource ListboxAqua}" ItemContainerStyle="{StaticResource ListboxItemAqua}" />
+                         Style="{StaticResource ListboxMagenta}" ItemContainerStyle="{StaticResource ListboxItemMagenta}" />
                 
                 <!-- Options -->
                 <Border BorderBrush="Transparent" BorderThickness="1" CornerRadius="2" Margin="4 6" Padding="4 2">
@@ -87,13 +87,13 @@
                         <SolidColorBrush Color="Black" Opacity="0.75" />
                     </TextBlock.Background>
                 </TextBlock>
-                <Button Name="BtnDecryptAESx" Content="Decrypt" Style="{StaticResource ButtonAqua}" 
+                <Button Name="BtnDecryptAESx" Content="Decrypt" Style="{StaticResource ButtonMagenta}" 
                         Click="BtnDecryptAES_Click" />
             </StackPanel>
         </Border>
 
         <!-- Image -->
-        <Border Grid.ColumnSpan="2" Style="{StaticResource ContainerLight}"
+        <Border Grid.ColumnSpan="2" Style="{StaticResource ContainerDark}"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <DockPanel>
                 <!-- Image -->
@@ -105,7 +105,7 @@
                 <!-- Body -->
                 <StackPanel VerticalAlignment="Center">
                     <!-- Title -->
-                    <TextBlock Text="Image" FontSize="28" FontWeight="SemiBold" TextAlignment="Center" Foreground="White"
+                    <TextBlock Text="AES" FontSize="28" FontWeight="SemiBold" TextAlignment="Center" Foreground="White"
                                Margin="0 0 0 10" />
                     <TextBlock Text="Select an Image to Encrypt:" Foreground="White" FontStyle="Italic" Margin="4"/>
                     <TextBlock Name="TxtPlainImgName" Text="..." FontSize="16" TextAlignment="Center" Margin="16 2"

@@ -63,7 +63,7 @@
             <StatusBarItem Margin="4 0" BorderBrush="LightGray" BorderThickness="0 0 1 0">
                 <DockPanel>
                     <Image Source="../Images/Icons/cake.png" Height="16" />
-                    <TextBlock Text="App Version: CakeLake v1.0" Margin="4 0" />
+                    <TextBlock Text="App Version: CakeLake v1.2" Margin="4 0" />
                 </DockPanel>
             </StatusBarItem>
             <StatusBarItem Margin="4 0" BorderBrush="LightGray" BorderThickness="0 0 1 0">

@@ -19,13 +19,13 @@
         </Grid.ColumnDefinitions>
         <Grid.Background>
             <ImageBrush
-                ImageSource="../Images/Backgrounds/bg-blue_red_gradient.jpg" />
+                ImageSource="../Images/Backgrounds/2.png" />
         </Grid.Background>
 
         <!-- Title -->
         <Border Grid.ColumnSpan="2">
             <Border.Background>
-                <SolidColorBrush Color="DarkSlateGray" Opacity="0.5" />
+                <SolidColorBrush Color="Black" Opacity="0.5" />
             </Border.Background>
             <StackPanel VerticalAlignment="Center">
                 <Label FontSize="36px" FontWeight="SemiBold"
@@ -36,13 +36,13 @@
         </Border>
 
         <!-- Center Text -->
-        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="OliveDrab" BorderThickness="1" CornerRadius="0 0 2 2"
+        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1" CornerRadius="0 0 2 2"
                 Margin="0" Padding="12 8"
                 HorizontalAlignment="Stretch" VerticalAlignment="Center">
             <Border.Background>
-                <SolidColorBrush Color="DarkOliveGreen" Opacity="0.5"></SolidColorBrush>
+                <SolidColorBrush Color="Black" Opacity="0.65"></SolidColorBrush>
             </Border.Background>
-            <TextBlock Text="💊 Pick your poison:" FontSize="24px" FontWeight="Regular"
+            <TextBlock Text="💊 Pick your poison:" FontSize="20px" FontWeight="Regular"
                        HorizontalAlignment="Center" Foreground="White" TextWrapping="Wrap" TextAlignment="Center" />
         </Border>
 
