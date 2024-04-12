@@ -60,7 +60,7 @@ namespace EncryptieTool.Views
                         sb.AppendLine($"File 2 hash: {SHA256String2}");
                         sb.AppendLine("");
                         sb.AppendLine("Integrity check complete: Success!");
-                        MessageBox.Show(sb.ToString(), "Ontegrity Checker");
+                        MessageBox.Show(sb.ToString(), "Integrity Checker");
                     }
                     else
                     {
@@ -94,7 +94,7 @@ namespace EncryptieTool.Views
                         sb.AppendLine($"File 2 hash: {BlakeString2}");
                         sb.AppendLine("");
                         sb.AppendLine("Integrity check complete: Success!");
-                        MessageBox.Show(sb.ToString(), "Ontegrity Checker");
+                        MessageBox.Show(sb.ToString(), "Integrity Checker");
                     }
                     else
                     {

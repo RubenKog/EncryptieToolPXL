@@ -14,6 +14,9 @@ using EncryptieTool.Windows;
 using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
 using System.Diagnostics;
+using System.Text;
+using static System.Net.WebRequestMethods;
+using File = System.IO.File;
 
 namespace EncryptieTool.Views
 {
@@ -111,7 +114,7 @@ namespace EncryptieTool.Views
             catch (CryptographicException ex)
             {
                 System.Windows.MessageBox.Show("Oops, something went wrong.\n" +
-                                               ex.Message, "Hmm 🤨", MessageBoxButton.OK, MessageBoxImage.Error);
+                                               ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -197,6 +200,25 @@ namespace EncryptieTool.Views
 
                     Process.Start(startInfo);
                 }
+                Hashing hashing = new Hashing();
+                StringBuilder sb = new StringBuilder();
+                byte[] HashedSHA;
+                byte[] HashedBLAKE;
+                HashedSHA = hashing.FileToHashSHA(filePathA);
+                HashedBLAKE = hashing.FileToHashBLAKE(filePathA);
+                string SHAString1 = Convert.ToBase64String(HashedSHA);
+                string BlakeString = Convert.ToBase64String(HashedBLAKE);
+
+                sb.AppendLine("Generating hashes to check file validity:");
+                sb.AppendLine("");
+                sb.AppendLine($"SHA256 Hash: {SHAString1}");
+                sb.AppendLine("");
+                sb.AppendLine($"Blake hash: {BlakeString}");
+                sb.AppendLine("");
+                sb.AppendLine("Hashing complete. Please ensure these match with the original hashes to guarantee integrity.");
+                MessageBox.Show(sb.ToString(), "Integrity Checker");
+
+
 
 
                 System.Windows.MessageBox.Show("Decryption successful, image saved!", "Success",
@@ -216,7 +238,7 @@ namespace EncryptieTool.Views
                 System.Windows.MessageBox.Show(
                     $"Something went wrong while decrypting the image. Are you sure you selected the right key?\n" +
                     $"{ex.Message}",
-                    "Hmm 🤨",
+                    "",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
