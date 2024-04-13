@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using EncryptieTool.Services;
 using KeysLibrary;
+using Button = System.Windows.Controls.Button;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace EncryptieTool.Windows
 {
@@ -19,9 +21,12 @@ namespace EncryptieTool.Windows
 
         private void InitGUI()
         {
-            TxtKeyPath.Text = Directories.KeyFolderPath;
-            TxtEncryptPath.Text = Directories.EncryptFolderPath;
-            TxtDecryptPath.Text = Directories.DecryptedFolderPath;
+            TxtAesPlain.Text = Directories.PlainAesPath;
+            TxtAesCipher.Text = Directories.CipherAesPath;
+            TxtRsaPublic.Text = Directories.RsaPublicPath;
+            TxtRsaPrivate.Text = Directories.RsaPrivatePath;
+            TxtEncryptedImage.Text = Directories.EncryptedImgPath;
+            TxtDecryptedImage.Text = Directories.DecryptedImgPath;
         }
 
         private void ButtonReturn(object sender, RoutedEventArgs e)
@@ -33,12 +38,30 @@ namespace EncryptieTool.Windows
         {
             var border = (Border)sender;
 
-            if (border.Tag.ToString() == "EncryptFolder")
-                System.Diagnostics.Process.Start("explorer.exe", Directories.EncryptFolderPath);
-            else if (border.Tag.ToString() == "DecryptFolder")
-                System.Diagnostics.Process.Start("explorer.exe", Directories.DecryptedFolderPath);
-            else if (border.Tag.ToString() == "KeyFolder")
-                System.Diagnostics.Process.Start("explorer.exe", Directories.KeyFolderPath);
+            switch (border.Tag.ToString())
+            {
+                case "AesPlain":
+                    System.Diagnostics.Process.Start("explorer.exe", Directories.PlainAesPath);
+                    break;
+                case "AesCipher":
+                    System.Diagnostics.Process.Start("explorer.exe", Directories.CipherAesPath);
+                    break;
+                case "RsaPublic":
+                    System.Diagnostics.Process.Start("explorer.exe", Directories.RsaPublicPath);
+                    break;
+                case "RsaPrivate":
+                    System.Diagnostics.Process.Start("explorer.exe", Directories.RsaPrivatePath);
+                    break;
+                case "ImgEncrypted":
+                    System.Diagnostics.Process.Start("explorer.exe", Directories.EncryptedImgPath);
+                    break;
+                case "ImgDecrypted":
+                    System.Diagnostics.Process.Start("explorer.exe", Directories.DecryptedImgPath);
+                    break;
+                default:
+                    System.Diagnostics.Process.Start("explorer.exe", Directories.RootFolderPath);
+                    break;
+            }
         }
 
         private void ButtonRootFolder(object sender, RoutedEventArgs e)
@@ -50,15 +73,68 @@ namespace EncryptieTool.Windows
         {
             // Confirmation dialog
             var result = System.Windows.MessageBox.Show(
-                "Are you sure you want to reset the paths to the default values?", 
+                "Are you sure you want to reset the paths to the default values?",
                 "Reset Paths", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.No) return;
-            
+
             // Reset paths
             Directories.ResetPaths();
-            
+
             // Refresh
             Navigation.ReloadPages();
+            InitGUI();
+        }
+
+        private void ButtonNewClick(object sender, RoutedEventArgs e)
+        {
+            // Get the clicked item
+            var button = (Button)sender;
+
+            //Open file dialog
+            string path;
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                dialog.Description = "Select a folder";
+                dialog.ShowDialog();
+                path = dialog.SelectedPath;
+            }
+
+            //! Return if no path was selected
+            if (string.IsNullOrEmpty(path)) return;
+
+            // Set the path based on tag
+            switch (button.Tag.ToString())
+            {
+                case "AesPlain":
+                    Directories.PlainAesPath = path;
+                    break;
+                case "AesCipher":
+                    Directories.CipherAesPath = path;
+                    break;
+                case "RsaPublic":
+                    Directories.RsaPublicPath = path;
+                    break;
+                case "RsaPrivate":
+                    Directories.RsaPrivatePath = path;
+                    break;
+                case "ImgEncrypted":
+                    Directories.EncryptedImgPath = path;
+                    break;
+                case "ImgDecrypted":
+                    Directories.DecryptedImgPath = path;
+                    break;
+                default:
+                    MessageBox.Show(@"Button tag name not recognized.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+            }
+            
+            //> Save the paths
+            Directories.SavePaths();
+
+            //> Refresh the pages
+            Navigation.ReloadPages();
+            
+            //> Refresh the GUI
             InitGUI();
         }
     }

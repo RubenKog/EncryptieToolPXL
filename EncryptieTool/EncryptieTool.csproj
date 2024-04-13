@@ -190,6 +190,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Icons\new.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\Icons\refresh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

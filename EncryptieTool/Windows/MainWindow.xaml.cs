@@ -60,13 +60,13 @@ namespace EncryptieTool
             switch (tag)
             {
                 case "Key":
-                    Directories.KeyFolderPath = path;
+                    Directories.PlainAesPath = path;
                     break;
                 case "Encrypt":
-                    Directories.EncryptFolderPath = path;
+                    Directories.EncryptedImgPath = path;
                     break;
                 case "Decrypt":
-                    Directories.DecryptedFolderPath = path;
+                    Directories.DecryptedImgPath = path;
                     break;
                 default:
                     MessageBox.Show(

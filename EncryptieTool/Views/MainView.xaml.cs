@@ -47,7 +47,7 @@ namespace EncryptieTool.Views
             // If the user selects a folder, save its path
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                Directories.KeyFolderPath = folderDialog.SelectedPath;
+                Directories.PlainAesPath = folderDialog.SelectedPath;
                 //LbIsFolderSelected.Content = "Folder Selected!";
                 //LbFolder.Content = folderDialog.SelectedPath;
                 //LbFolder.Visibility = Visibility.Visible;

@@ -15,30 +15,48 @@ namespace KeysLibrary
         /// </summary>
         public static readonly string RootFolderPath =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "HOMEWORK_2PROA1");
+        
+        /// <summary>
+        /// Folder where the app settings are stored. App settings contain the paths to the keys and encrypted files as an XDocument.
+        /// </summary>
+        private static readonly string AppSettingsPath
+            = Path.Combine(RootFolderPath, "Settings");
 
         /// <summary>
-        /// Folder where the keys are stored.
+        /// Folder where the (plain text) AES keys are stored.
         /// </summary>
-        public static string KeyFolderPath
-            = Path.Combine(RootFolderPath, "Keys");
+        public static string PlainAesPath
+            = Path.Combine(RootFolderPath, "Aes_Keys");
+        
+        /// <summary>
+        /// Folder where the (cipher text) AES keys are stored.
+        /// </summary>
+        public static string CipherAesPath
+            = Path.Combine(RootFolderPath, "Aes_Encrypted");
 
         /// <summary>
         /// Folder where the encrypted files are stored.
         /// </summary>
-        public static string EncryptFolderPath
-            = Path.Combine(RootFolderPath, "Encrypted");
+        public static string EncryptedImgPath
+            = Path.Combine(RootFolderPath, "Images_Encrypted");
 
         /// <summary>
         /// Folder where the decrypted files are stored.
         /// </summary>
-        public static string DecryptedFolderPath
-            = Path.Combine(RootFolderPath, "Decrypted");
+        public static string DecryptedImgPath
+            = Path.Combine(RootFolderPath, "Images_Decrypted");
 
         /// <summary>
-        /// Folder where the app settings are stored. App settings contain the paths to the keys and encrypted files as an XDocument.
+        /// Folder where the RSA private keys are stored.
         /// </summary>
-        public static readonly string AppSettingsPath
-            = Path.Combine(RootFolderPath, "Settings");
+        public static string RsaPrivatePath
+            = Path.Combine(RootFolderPath, "RSA_Private");
+
+        /// <summary>
+        /// Folder where the RSA public keys are stored.
+        /// </summary>
+        public static string RsaPublicPath
+            = Path.Combine(RootFolderPath, "RSA_Public");
 
         #endregion
 
@@ -62,19 +80,43 @@ namespace KeysLibrary
         /// <returns>False if no settings file was found.</returns>
         private static bool ReadPathsFromSettings()
         {
-            //! Check if the settings file exists else return false
-            if (!File.Exists(AppSettingsPath + "/Settings.xml")) return false;
+            //! Return if the settings file is corrupted
+            if (!VerifySettingsFile()) return false;
 
             //Load the settings from the file
             XDocument settings = XDocument.Load(AppSettingsPath + "/Settings.xml");
 
             //Get the paths from the settings
-            KeyFolderPath = settings.Element("Paths").Element("KeyFolderPath").Value;
-            EncryptFolderPath = settings.Element("Paths").Element("EncryptFolderPath").Value;
-            DecryptedFolderPath = settings.Element("Paths").Element("DecryptedFolderPath").Value;
+            PlainAesPath = settings.Element("Paths")?.Element("PlainAesPath")?.Value;
+            CipherAesPath = settings.Element("Paths")?.Element("CipherAesPath")?.Value;
+            EncryptedImgPath = settings.Element("Paths")?.Element("EncryptedImgPath")?.Value;
+            DecryptedImgPath = settings.Element("Paths")?.Element("DecryptedImgPath")?.Value;
+            RsaPublicPath = settings.Element("Paths")?.Element("RsaPublicPath")?.Value;
+            RsaPrivatePath = settings.Element("Paths")?.Element("RsaPrivatePath")?.Value;
 
-            // Return true to indicate that the settings were loaded :]
+            // Return true to indicate that the settings were correctly loaded :]
             return true;
+        }
+
+        /// <summary>
+        /// Checks if all the paths in the settings file are present.
+        /// </summary>
+        /// <returns>False if it misses a path.</returns>
+        private static bool VerifySettingsFile()
+        {
+            //Do the settings file exist?
+            if (!File.Exists(AppSettingsPath + "/Settings.xml")) return false;
+            
+            //Load the settings from the file
+            var settings = XDocument.Load(AppSettingsPath + "/Settings.xml");
+            
+            //Check if all the paths are present
+            return settings.Element("Paths")?.Element("PlainAesPath") != null &&
+                   settings.Element("Paths")?.Element("CipherAesPath") != null &&
+                   settings.Element("Paths")?.Element("EncryptedImgPath") != null &&
+                   settings.Element("Paths")?.Element("DecryptedImgPath") != null &&
+                   settings.Element("Paths")?.Element("RsaPublicPath") != null &&
+                   settings.Element("Paths")?.Element("RsaPrivatePath") != null;
         }
 
         /// <summary>
@@ -86,9 +128,12 @@ namespace KeysLibrary
             //Create XDocument with the settings
             XDocument settings = new XDocument(
                 new XElement("Paths",
-                    new XElement("KeyFolderPath", KeyFolderPath),
-                    new XElement("EncryptFolderPath", EncryptFolderPath),
-                    new XElement("DecryptedFolderPath", DecryptedFolderPath)
+                    new XElement("PlainAesPath", PlainAesPath),
+                    new XElement("CipherAesPath", CipherAesPath),
+                    new XElement("EncryptedImgPath", EncryptedImgPath),
+                    new XElement("DecryptedImgPath", DecryptedImgPath),
+                    new XElement("RsaPublicPath", RsaPublicPath),
+                    new XElement("RsaPrivatePath", RsaPrivatePath)
                 )
             );
 
@@ -102,19 +147,35 @@ namespace KeysLibrary
         /// </summary>
         public static void EnsureDirectoriesExist()
         {
+            //App folder
             Directory.CreateDirectory(RootFolderPath);
             Directory.CreateDirectory(AppSettingsPath);
-            Directory.CreateDirectory(EncryptFolderPath);
-            Directory.CreateDirectory(DecryptedFolderPath);
-            Directory.CreateDirectory(KeyFolderPath);
+            
+            //Image folders
+            Directory.CreateDirectory(EncryptedImgPath);
+            Directory.CreateDirectory(DecryptedImgPath);
+            
+            //AES folders
+            Directory.CreateDirectory(PlainAesPath);
+            Directory.CreateDirectory(CipherAesPath);
+            
+            //RSA folders
+            Directory.CreateDirectory(RsaPrivatePath);
+            Directory.CreateDirectory(RsaPublicPath);
         }
-        
+
+        /// <summary>
+        /// Resets the paths to the default paths and saves them to the settings.
+        /// </summary>
         public static void ResetPaths()
         {
             //Reset the paths to the default paths
-            KeyFolderPath = Path.Combine(RootFolderPath, "Keys");
-            EncryptFolderPath = Path.Combine(RootFolderPath, "Encrypted");
-            DecryptedFolderPath = Path.Combine(RootFolderPath, "Decrypted");
+            PlainAesPath = Path.Combine(RootFolderPath, "Aes_Keys");
+            CipherAesPath = Path.Combine(RootFolderPath, "Aes_Encrypted");
+            EncryptedImgPath = Path.Combine(RootFolderPath, "Images_Encrypted");
+            DecryptedImgPath = Path.Combine(RootFolderPath, "Images_Decrypted");
+            RsaPrivatePath = Path.Combine(RootFolderPath, "RSA_Private");
+            RsaPublicPath = Path.Combine(RootFolderPath, "RSA_Public");
 
             //Save the paths to the settings
             SavePaths();

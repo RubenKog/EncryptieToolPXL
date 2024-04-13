@@ -23,14 +23,10 @@
                 </MenuItem.Icon>
             </MenuItem>
             <!-- Folders -->
-            <MenuItem Header="Directories">
+            <MenuItem Header="Directories" Click="PathDetailsClick" Cursor="Hand">
                 <MenuItem.Icon>
                     <Image Source="../Images/Icons/folder_red.png" />
                 </MenuItem.Icon>
-                <MenuItem Tag="Encrypt" Header="Select Encrypt Folder" Click="SelectPathClick" />
-                <MenuItem Tag="Decrypt" Header="Select Decrypt Folder" Click="SelectPathClick" />
-                <MenuItem Tag="Key" Header="Select Key Folder" Click="SelectPathClick" />
-                <MenuItem Header="View Folders" Click="PathDetailsClick" />
             </MenuItem>
             <!-- Navigation || Not really necessary anymore with the <Back> and <Refresh> buttons being enough. -->
             <MenuItem Header="Navigate">
@@ -41,6 +37,7 @@
                 <MenuItem Tag="AesView" Header="Aes" Click="NavMenuItem_Click" />
                 <MenuItem Tag="RsaView" Header="Rsa" Click="NavMenuItem_Click" />
                 <MenuItem Tag="HashingView" Header="Validity" Click="NavMenuItem_Click" />
+                <Separator/>
                 <MenuItem Header="Display Navigation UI" Click="DisplayUIClick"
                           IsCheckable="True" IsChecked="False" />
             </MenuItem>

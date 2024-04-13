@@ -153,11 +153,11 @@ namespace EncryptieTool.Views
             string aesIV = _cryptingAes.ByteArToReadableString(aes.IV);
             string aesName = _keyName;
 
-            string filePath = Path.Combine(Directories.KeyFolderPath, "AESInfo.txt");
+            string filePath = Path.Combine(Directories.PlainAesPath, "AESInfo.txt");
 
             // Check if the folder exists, if not, create it
-            if (!Directory.Exists(Directories.KeyFolderPath))
-                Directory.CreateDirectory(Directories.KeyFolderPath);
+            if (!Directory.Exists(Directories.PlainAesPath))
+                Directory.CreateDirectory(Directories.PlainAesPath);
 
             // Write the AES information to the file
             using (StreamWriter writer = File.AppendText(filePath))
@@ -292,10 +292,10 @@ namespace EncryptieTool.Views
             ListDecryptedImgs.ItemsSource = null;
 
             //! Check if the directory exists
-            if (!Directory.Exists(Directories.EncryptFolderPath)) return;
+            if (!Directory.Exists(Directories.EncryptedImgPath)) return;
 
             //Get all the text files in the directory
-            string[] textFiles = Directory.GetFiles(Directories.EncryptFolderPath, "*.txt");
+            string[] textFiles = Directory.GetFiles(Directories.EncryptedImgPath, "*.txt");
 
             //Iterate over all the files
             foreach (var file in textFiles)
@@ -355,9 +355,9 @@ namespace EncryptieTool.Views
             _aesList.Clear();
             ListKeys.ItemsSource = null;
 
-            if (File.Exists(Path.Combine(Directories.KeyFolderPath, "AESInfo.txt")))
+            if (File.Exists(Path.Combine(Directories.PlainAesPath, "AESInfo.txt")))
             {
-                using (StreamReader reader = new StreamReader(Path.Combine(Directories.KeyFolderPath, "AESInfo.txt")))
+                using (StreamReader reader = new StreamReader(Path.Combine(Directories.PlainAesPath, "AESInfo.txt")))
                 {
                     string line;
                     string aesName = null, aesKey = null, aesIV = null;
@@ -418,7 +418,7 @@ namespace EncryptieTool.Views
                 System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
 
                 //TODO: All Images are saved as PNG by default but images can be selected in different formats.
-                var filePath = Path.Combine(Directories.DecryptedFolderPath,
+                var filePath = Path.Combine(Directories.DecryptedImgPath,
                     CheckDefaultImgName.IsChecked == true
                         ? $"{_decryptedImgName}.png"
                         : $"{GetEncryptedImgName()}.png");
@@ -434,8 +434,8 @@ namespace EncryptieTool.Views
 
         private void SaveEncryptedImg(string EncryptedImg)
         {
-            //string folderPath = Path.Combine($"{Directories.EncryptFolderPath}\\Encrypted\\");
-            string filePath = Path.Combine(Directories.EncryptFolderPath, $"{_encryptedImgName}.txt");
+            //string folderPath = Path.Combine($"{Directories.EncryptedImgPath}\\Encrypted\\");
+            string filePath = Path.Combine(Directories.EncryptedImgPath, $"{_encryptedImgName}.txt");
 
             Directories.EnsureDirectoriesExist();
 

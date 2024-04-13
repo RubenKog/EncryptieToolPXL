@@ -8,57 +8,126 @@
         Title="Path Details" Height="auto" Width="auto">
     <Window.Resources>
         <Style TargetType="Border" x:Key="DetailContainer">
-            <Setter Property="Background" Value="WhiteSmoke" />
+            <Setter Property="Background" Value="White" />
             <Setter Property="BorderBrush" Value="Black" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="2" />
-            <Setter Property="Margin" Value="4" />
+            <Setter Property="Margin" Value="4 4 2 4" />
             <Setter Property="Padding" Value="8 4" />
         </Style>
     </Window.Resources>
-    <DockPanel Height="auto" Width="440" MaxHeight="900">
-        <!-- Butt(ons) -->
-        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-            <Button Content="Reset to Defaults" Style="{StaticResource ButtonMagenta}"
-                    Click="ButtonReset"/>
-            <Button Content="Open Root Folder" Style="{StaticResource ButtonAqua}"
-                    Click="ButtonRootFolder" />
-            <Button Content="Return" Style="{StaticResource ButtonLight}"
-                    Click="ButtonReturn" />
-        </WrapPanel>
+    <DockPanel Height="auto" Width="600" MaxHeight="460" Background="#FFF7FC">
+        <!-- Top panel -->
+        <Border Background="#5755FE" BorderBrush="#8B93FF" DockPanel.Dock="Top" CornerRadius="0 0 2 2" BorderThickness="1">
+            <DockPanel>
+                <!-- Image -->
+                <Image Source="../Images/Icons/folder_eye.png" DockPanel.Dock="Right" Width="60" Stretch="Uniform" 
+                       Margin="4 2" VerticalAlignment="Center"/>
+                <TextBlock Text="Directories" FontSize="28" FontWeight="Normal" Margin="4"
+                           Foreground="White" VerticalAlignment="Center" FontStyle="Italic"/>
+            </DockPanel>
+        </Border>
         
-        <!-- Image -->
-        <Image Source="../Images/Icons/folder_eye.png" DockPanel.Dock="Left" Width="100" Stretch="Uniform" Margin="4" />
-
-        <!-- Details -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <!-- Footer -->
+        <Border Background="#5755FE" BorderBrush="#8B93FF" DockPanel.Dock="Bottom" CornerRadius="2 2 0 0" BorderThickness="1">
+            <WrapPanel HorizontalAlignment="Center">
+                <Button Content="Reset to Defaults" Style="{StaticResource ButtonMagenta}"
+                        Click="ButtonReset" />
+                <Button Content="Open Root Folder" Style="{StaticResource ButtonAqua}"
+                        Click="ButtonRootFolder" />
+                <Button Content="Return" Style="{StaticResource ButtonLight}"
+                        Click="ButtonReturn" />
+            </WrapPanel>
+        </Border>
+        
+        <!-- Body -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0 0 2 0">
             <StackPanel DockPanel.Dock="Right">
-                <Border Style="{StaticResource DetailContainer}" MouseUp="OpenPathInExplorer" Tag="KeyFolder" Cursor="Hand">
-                    <StackPanel>
-                        <TextBlock Text="Path to save keys:" FontWeight="Bold" />
-                        <TextBlock x:Name="TxtKeyPath" Text="Documents/users/Keyz" TextWrapping="Wrap" />
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource DetailContainer}" Cursor="Hand" MouseUp="OpenPathInExplorer"
-                        Tag="EncryptFolder">
-                    <StackPanel>
-                        <TextBlock Text="Path to save encrypted images:" FontWeight="Bold" />
-                        <TextBlock x:Name="TxtEncryptPath" Text="Documents/users/EncryptFolder"
-                                   TextWrapping="Wrap" />
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource DetailContainer}" Cursor="Hand" MouseUp="OpenPathInExplorer"
-                        Tag="DecryptFolder">
-                    <StackPanel>
-                        <TextBlock Text="Path to save decrypted images:" FontWeight="Bold" />
-                        <TextBlock x:Name="TxtDecryptPath" Text="Documents/users/Decryptiojfklsd"
-                                   TextWrapping="Wrap" />
-                    </StackPanel>
-                </Border>
+                <!-- Aes -->
+                <DockPanel>
+                    <Button Style="{StaticResource ButtonLight}" Margin="0 4 4 4" Width="50" MinWidth="0"
+                            DockPanel.Dock="Right" Tag="AesPlain" Click="ButtonNewClick">
+                        <Image Source="../Images/Icons/new.png" />
+                    </Button>
+                    <Border Style="{StaticResource DetailContainer}" MouseUp="OpenPathInExplorer" Tag="AesPlain"
+                            Cursor="Hand">
+                        <StackPanel MaxHeight="100">
+                            <TextBlock Text="AES (Plain):" FontWeight="Bold" />
+                            <TextBlock x:Name="TxtAesPlain" Text="Documents/Homework/AesPlainbaby" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
+                <DockPanel>
+                    <Button Style="{StaticResource ButtonLight}" Margin="0 4 4 4" Width="50" MinWidth="0"
+                            DockPanel.Dock="Right" Tag="AesCipher" Click="ButtonNewClick">
+                        <Image Source="../Images/Icons/new.png" />
+                    </Button>
+                    <Border Style="{StaticResource DetailContainer}" MouseUp="OpenPathInExplorer" Tag="AesCipher"
+                            Cursor="Hand">
+                        <StackPanel MaxHeight="100">
+                            <TextBlock Text="AES (Cipher):" FontWeight="Bold" />
+                            <TextBlock x:Name="TxtAesCipher" Text="Documents/users/Keyz" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
 
-                
+                <!-- Rsa -->
+                <DockPanel>
+                    <Button Style="{StaticResource ButtonLight}" Margin="0 4 4 4" Width="50" MinWidth="0"
+                            DockPanel.Dock="Right" Tag="RsaPublic" Click="ButtonNewClick">
+                        <Image Source="../Images/Icons/new.png" />
+                    </Button>
+                    <Border Style="{StaticResource DetailContainer}" Cursor="Hand" MouseUp="OpenPathInExplorer"
+                            Tag="RsaPublic">
+                        <StackPanel MaxHeight="100">
+                            <TextBlock Text="Rsa Public:" FontWeight="Bold" />
+                            <TextBlock x:Name="TxtRsaPublic" Text="Documents/users/RsaPub" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
+                <DockPanel>
+                    <Button Style="{StaticResource ButtonLight}" Margin="0 4 4 4" Width="50" MinWidth="0"
+                            DockPanel.Dock="Right" Tag="RsaPrivate" Click="ButtonNewClick">
+                        <Image Source="../Images/Icons/new.png" />
+                    </Button>
+                    <Border Style="{StaticResource DetailContainer}" Cursor="Hand" MouseUp="OpenPathInExplorer"
+                            Tag="RsaPrivate">
+                        <StackPanel MaxHeight="100">
+                            <TextBlock Text="Rsa Private:" FontWeight="Bold" />
+                            <TextBlock x:Name="TxtRsaPrivate" Text="Documents/users/RsaPriv" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
+
+                <!-- Images -->
+                <DockPanel>
+                    <Button Style="{StaticResource ButtonLight}" Margin="0 4 4 4" Width="50" MinWidth="0"
+                            DockPanel.Dock="Right" Tag="ImgEncrypted" Click="ButtonNewClick">
+                        <Image Source="../Images/Icons/new.png" />
+                    </Button>
+                    <Border Style="{StaticResource DetailContainer}" Cursor="Hand" MouseUp="OpenPathInExplorer"
+                            Tag="ImgEncrypted">
+                        <StackPanel MaxHeight="100">
+                            <TextBlock Text="Encrypted Images:" FontWeight="Bold" />
+                            <TextBlock x:Name="TxtEncryptedImage" Text="Documents/users/EncryptFolder"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
+                <DockPanel>
+                    <Button Style="{StaticResource ButtonLight}" Margin="0 4 4 4" Width="50" MinWidth="0"
+                            DockPanel.Dock="Right" Tag="ImgDecrypted" Click="ButtonNewClick">
+                        <Image Source="../Images/Icons/new.png" />
+                    </Button>
+                    <Border Style="{StaticResource DetailContainer}" Cursor="Hand" MouseUp="OpenPathInExplorer"
+                            Tag="ImgDecrypted">
+                        <StackPanel MaxHeight="100">
+                            <TextBlock Text="Decrypted Images:" FontWeight="Bold" />
+                            <TextBlock x:Name="TxtDecryptedImage" Text="Documents/users/Karel" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
             </StackPanel>
         </ScrollViewer>
-        
     </DockPanel>
 </Window>
