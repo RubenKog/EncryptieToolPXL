@@ -21,7 +21,7 @@
         <!-- Body -->
         <StackPanel Margin="4 8 8 8" VerticalAlignment="Center">
             <TextBlock Text="I asked(:" FontSize="32" Margin="0 0 0 4"
-                       Background="GhostWhite"/>
+                       Background="GhostWhite" Visibility="Hidden"/>
             <TextBlock Text="Type your Input:" FontSize="16"/>
             <TextBox x:Name="TxtInput" Margin="6" FontSize="14" Padding="2" TextAlignment="Center" MaxLength="32" 
                      TextChanged="TxtInput_OnTextChanged" PreviewKeyDown="TxtInput_OnPreviewKeyDown"/>

@@ -157,6 +157,17 @@ namespace EncryptieTool.Views
         private void CBHashingAG_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             HashingAlgor = ((ComboBoxItem)CBHashingAG.SelectedItem).Content.ToString();
+            if(HashingAlgor != "SHA256")
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("BLAKE3 doesn't work in the same manner as SHA256.");
+                sb.AppendLine("It's newer, providing a better resistance against various cryptographic attacks than SHA256.");
+                sb.AppendLine("");
+                sb.AppendLine("However, we have noticed that BLAKE3 can, unlike SHA256, be affected by the metadata of a file.");
+                sb.AppendLine("This means that 2 files with the same content can result in 2 different hashes.");
+                sb.AppendLine("So if an integrity test results in a fail while using BLAKE3, this might not be correct. False negatives are possible.");
+                MessageBox.Show(sb.ToString(), "BLAKE3 warning");
+            }
         }
     }
 }

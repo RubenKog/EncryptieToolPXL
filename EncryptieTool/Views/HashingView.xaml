@@ -368,7 +368,7 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <ComboBox Style="{DynamicResource ComboBoxStyle1}" Name="CBHashingAG" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28" SelectionChanged="CBHashingAG_SelectionChanged">
                             <ComboBoxItem Content="SHA256" IsSelected="True"/>
-                            <ComboBoxItem Content="BLAKE2"/>
+                            <ComboBoxItem Content="BLAKE3"/>
                         </ComboBox>
                         <TextBlock Text="Validity Checker" FontSize="28" FontWeight="SemiBold" TextAlignment="Center" Foreground="White"
                            Margin="0 0 0 10" />
