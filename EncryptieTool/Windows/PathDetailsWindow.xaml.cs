@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using EncryptieTool.Services;
 using KeysLibrary;
+using KeysLibrary.Services;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.Forms.MessageBox;
 

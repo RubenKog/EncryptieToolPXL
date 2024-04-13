@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Xml.Linq;
 
-namespace KeysLibrary
+namespace KeysLibrary.Services
 {
     public static class Directories
     {

@@ -1,14 +1,15 @@
 ﻿<Page x:Class="EncryptieTool.Views.RsaView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EncryptieTool.Views"
-        mc:Ignorable="d"
-        Title="RsaView" Height="auto" Width="auto">
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:local="clr-namespace:EncryptieTool.Views"
+      mc:Ignorable="d"
+      Title="RsaView" Height="auto" Width="auto">
     <Grid Height="auto" Width="auto" d:DesignWidth="500" d:DesignHeight="460">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -19,42 +20,135 @@
             <ImageBrush ImageSource="../Images/Backgrounds/3blue.png" />
         </Grid.Background>
 
-        <!-- Encrypt Container -->
-        <Border Grid.Row="1" Style="{StaticResource ContainerDBlue}"
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <StackPanel VerticalAlignment="Top">
-                <!-- Title -->
-                <TextBlock Text="AES keys from file:" Foreground="White" FontStyle="Italic" Margin="0 0 0 4" />
-                <ListBox Name="LstAesKeys" FontSize="14" BorderThickness="0" Foreground="White"
-                         MinHeight="200px" Margin="2" >
-                    <ListBox.Background>
-                        <SolidColorBrush Color="Black" Opacity="0.35"/>
-                    </ListBox.Background>
-                </ListBox>
-                
-                <!-- Encrypt -->
-                <TextBox Name="TxtImgName" Text="[Image Name]" TextAlignment="Center" Visibility="Collapsed"/>
-                <Button Name="BtnEncryptAndSave" Margin="4" Style="{StaticResource ButtonAqua}"
-                        Content="Encrypt and Save" Click="BtnEncryptAndSave_Click" />
-
-
+        <!-- RSA Creation container -->
+        <Border Grid.ColumnSpan="2" Style="{StaticResource ContainerDark}" HorizontalAlignment="Stretch">
+            <StackPanel>
+                <TextBlock Text="Create new key pair:" Foreground="White" FontSize="14" FontStyle="Italic" />
+                <DockPanel>
+                    <Button Content="Create" DockPanel.Dock="Right" Style="{StaticResource ButtonAqua}" Margin="4 0"
+                            Click="ButtonCreateKeys" />
+                    <TextBlock x:Name="TxtNewKeyName" Text="Click to name key" MouseUp="InputField_Click" Cursor="Hand"
+                               FontSize="14" Foreground="LightSteelBlue" HorizontalAlignment="Stretch"
+                               TextAlignment="Center"
+                               Padding="4 2" VerticalAlignment="Center"
+                               ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.75" />
+                        </TextBlock.Background>
+                    </TextBlock>
+                </DockPanel>
             </StackPanel>
         </Border>
 
+        <!-- RSA Public Container -->
+        <Border Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContainerAqua}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="1.2*" />
+                </Grid.RowDefinitions>
+                <!-- Rsa Public -->
+                <DockPanel Grid.Row="0">
+                    <!-- Title -->
+                    <TextBlock DockPanel.Dock="Top" Text="Public Rsa:" FontSize="14" Foreground="White"
+                               FontStyle="Italic"
+                               Margin="4 0 0 2" />
+                    <!-- Listbox -->
+                    <ListBox Name="LstPublicRsa" FontSize="14" BorderThickness="0" Foreground="White"
+                             Margin="0 2" Style="{StaticResource ListboxAqua}"
+                             ItemContainerStyle="{StaticResource ListboxItemAqua}">
+                    </ListBox>
+                </DockPanel>
+                <!-- Empty row for spacing -->
+                <!-- Aes Plain -->
+                <DockPanel Grid.Row="2">
+                    <!-- Title -->
+                    <TextBlock DockPanel.Dock="Top" Text="(Plain) Aes keys:" FontSize="14" Foreground="White"
+                               FontStyle="Italic"
+                               Margin="4 0 0 2" />
+                    <!-- Button -->
+                    <StackPanel DockPanel.Dock="Bottom">
+                        <TextBlock x:Name="TxtCipherAes" Text="Click to name cipher key" MouseUp="InputField_Click" Cursor="Hand"
+                                   FontSize="14" Foreground="LightSteelBlue" HorizontalAlignment="Stretch"
+                                   TextAlignment="Center"
+                                   Padding="4 2" VerticalAlignment="Center"
+                                   ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}">
+                            <TextBlock.Background>
+                                <SolidColorBrush Color="Black" Opacity="0.75" />
+                            </TextBlock.Background>
+                        </TextBlock>
+                        <Button DockPanel.Dock="Bottom" Margin="4" Style="{StaticResource ButtonAqua}"
+                                Content="Encrypt" HorizontalAlignment="Stretch" Click="BtnEncryptClick" />
+                    </StackPanel>
+                    
+                    <!-- Listbox -->
+                    <ListBox Name="LstPlainAes" FontSize="14" BorderThickness="0" Foreground="White"
+                             Margin="0 2" Style="{StaticResource ListboxAqua}"
+                             ItemContainerStyle="{StaticResource ListboxItemAqua}"
+                             DisplayMemberPath="AesName">
+                    </ListBox>
+                </DockPanel>
+            </Grid>
+        </Border>
+
+        <!-- RSA Private Container -->
+        <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource ContainerDBlue}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <DockPanel>
+                <!-- Title -->
+                <TextBlock DockPanel.Dock="Top" Text="Private Rsa:" FontSize="14" Foreground="White" FontStyle="Italic"
+                           Margin="0 0 0 2" />
+                <!-- Listbox -->
+                <ListBox Name="LstPrivateRsa" FontSize="14" BorderThickness="0" Foreground="White"
+                         Margin="0 2" Style="{StaticResource ListboxAqua}"
+                         ItemContainerStyle="{StaticResource ListboxItemAqua}">
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <!-- Plain Aes -->
+        <Border Visibility="Collapsed"
+                Grid.Column="0" Grid.Row="2" Style="{StaticResource ContainerDBlue}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+        </Border>
+
+        <!-- Cipher Aes -->
+        <Border Grid.Column="1" Grid.Row="2" Style="{StaticResource ContainerDBlue}"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <DockPanel>
+                <!-- Title -->
+                <TextBlock DockPanel.Dock="Top" Text="(Cipher) Aes keys:" FontSize="14" Foreground="White"
+                           FontStyle="Italic" Margin="0 0 0 2" />
+                <!-- Button -->
+                <Button DockPanel.Dock="Bottom" Margin="4" Style="{StaticResource ButtonMagenta}"
+                        Content="Decrypt" HorizontalAlignment="Stretch" Click="ButtonDecrypt" />
+                <!-- Listbox -->
+                <ListBox Name="LstCipherAes" FontSize="14" BorderThickness="0" Foreground="White"
+                         Margin="0 2" Style="{StaticResource ListboxAqua}"
+                         ItemContainerStyle="{StaticResource ListboxItemAqua}"
+                         DisplayMemberPath="AesName">
+                </ListBox>
+            </DockPanel>
+        </Border>
+
         <!-- Decrypt -->
-        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource ContainerDBlue}"
+        <Border Visibility="Collapsed"
+                Grid.Column="1" Grid.Row="2" Style="{StaticResource ContainerDBlue}"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <StackPanel VerticalAlignment="Top">
                 <!-- Title -->
                 <TextBlock Text="Select AES Key:" Foreground="White" FontStyle="Italic" Margin="0 0 0 4" />
                 <Button Name="BtnUseRSA" Margin="4" Content="📂 Browse" Click="BtnUseRSA_Click"
-                            Style="{StaticResource ButtonLight}" />
-                
+                        Style="{StaticResource ButtonLight}" />
 
 
                 <TextBlock Text="Decrypted AES:" Foreground="White" FontStyle="Italic" Margin="0 0 0 4" />
                 <TextBlock x:Name="TxtDecryptedAES"
-                           FontSize="14" Foreground="LightSteelBlue" HorizontalAlignment="Stretch" TextAlignment="Center"
+                           FontSize="14" Foreground="LightSteelBlue" HorizontalAlignment="Stretch"
+                           TextAlignment="Center"
                            Padding="4 2" Margin="0 0 0 4">
                     <TextBlock.Background>
                         <SolidColorBrush Color="Black" Opacity="0.75" />
@@ -63,34 +157,5 @@
 
             </StackPanel>
         </Border>
-
-        <!-- Image -->
-        <Border Grid.ColumnSpan="2" Style="{StaticResource ContainerDark}"
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <DockPanel>
-                <!-- Image -->
-                <Border BorderBrush="#222831" BorderThickness="1" CornerRadius="2" Margin="0 0 12 0" 
-                        VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Image Name="PickedImg" Height="120" Width="120" Source="../Images/Icons/Image_Encrypted.jpg"
-                           Stretch="UniformToFill" />
-                </Border>
-                <!-- Body -->
-                <StackPanel VerticalAlignment="Center">
-                    <!-- Title -->
-                    <TextBlock Text="RSA" FontSize="28" FontWeight="SemiBold" TextAlignment="Center" Foreground="White"
-                               Margin="0 0 0 10" />
-
-                    <TextBlock Text="Select AESinfo file:" Foreground="White" FontStyle="Italic" Margin="0 0 0 4" />
-                    <Button Name="BtnSelectAESFile" Margin="4" Content="📂 Browse" Click="BtnSelectAESFile_Click"
-                            Style="{StaticResource ButtonLight}" />
-                    
-
-
-
-
-                </StackPanel>
-            </DockPanel>
-        </Border>
     </Grid>
-
 </Page>

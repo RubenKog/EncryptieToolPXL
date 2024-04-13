@@ -5,6 +5,7 @@ using System.Windows.Navigation;
 using EncryptieTool.Services;
 using EncryptieTool.Windows;
 using KeysLibrary;
+using KeysLibrary.Services;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace EncryptieTool
