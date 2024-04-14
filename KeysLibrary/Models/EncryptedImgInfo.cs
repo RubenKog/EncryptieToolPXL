@@ -1,4 +1,4 @@
-﻿namespace KeysLibrary
+﻿namespace KeysLibrary.Models
 {
 	public class EncryptedImgInfo
 	{

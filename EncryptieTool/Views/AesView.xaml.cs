@@ -419,37 +419,51 @@ namespace EncryptieTool.Views
                 // Create an Image from the MemoryStream
                 System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
 
-                //TODO: All Images are saved as PNG by default but images can be selected in different formats.
-                var filePath = Path.Combine(Directories.DecryptedImgPath,
-                    CheckDefaultImgName.IsChecked == true
-                        ? $"{_decryptedImgName}.png"
-                        : $"{GetEncryptedImgName()}.png");
+                try
+                {
+                    var filePath = Path.Combine(Directories.DecryptedImgPath,
+                        CheckDefaultImgName.IsChecked == true
+                            ? $"{_decryptedImgName}.png"
+                            : $"{GetEncryptedImgName()}.png");
+                    
+                    filePathA = filePath;
+                    // Ensure that directories exist
+                    Directories.EnsureDirectoriesExist();
 
-                filePathA = filePath;
-                // Ensure that directories exist
-                Directories.EnsureDirectoriesExist();
-
-                // Save the image to the specified path
-                image.Save(filePath);
+                    // Save the image to the specified path
+                    image.Save(filePath);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message, "I told you", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
             }
         }
 
         private void SaveEncryptedImg(string EncryptedImg)
         {
             //string folderPath = Path.Combine($"{Directories.EncryptedImgPath}\\Encrypted\\");
-            string filePath = Path.Combine(Directories.EncryptedImgPath, $"{_encryptedImgName}.txt");
-
-            Directories.EnsureDirectoriesExist();
-
-            using (StreamWriter writer = File.AppendText(filePath))
+            try
             {
-                // Write the AES information as a group of three
-                writer.WriteLine($"Img Name: {_encryptedImgName}");
-                writer.WriteLine($"AES-Encrypted Image: {EncryptedImg}");
-                writer.WriteLine(); // Add an empty line to separate groups
-            }
+                string filePath = Path.Combine(Directories.EncryptedImgPath, $"{_encryptedImgName}.txt");
+                Directories.EnsureDirectoriesExist();
 
-            ReadEncryptedImg();
+                using (StreamWriter writer = File.AppendText(filePath))
+                {
+                    // Write the AES information as a group of three
+                    writer.WriteLine($"Img Name: {_encryptedImgName}");
+                    writer.WriteLine($"AES-Encrypted Image: {EncryptedImg}");
+                    writer.WriteLine(); // Add an empty line to separate groups
+                }
+
+                ReadEncryptedImg();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "I told you", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
         }
 
         #endregion

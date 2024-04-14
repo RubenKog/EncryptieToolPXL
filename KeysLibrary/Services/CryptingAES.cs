@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using KeysLibrary.Models;
 
-namespace KeysLibrary
+namespace KeysLibrary.Services
 {
 	public class CryptingAES
 	{

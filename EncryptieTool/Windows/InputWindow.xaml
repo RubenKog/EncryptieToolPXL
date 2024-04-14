@@ -25,6 +25,7 @@
             <TextBlock Text="Type your Input:" FontSize="16"/>
             <TextBox x:Name="TxtInput" Margin="6" FontSize="14" Padding="2" TextAlignment="Center" MaxLength="32" 
                      TextChanged="TxtInput_OnTextChanged" PreviewKeyDown="TxtInput_OnPreviewKeyDown"/>
+            <TextBlock Text="Avoid these: / \ : ? | * &quot; &lt; &gt;" Foreground="OrangeRed" TextAlignment="Center"/>
             <WrapPanel HorizontalAlignment="Center">
                 <Button Content="Ok!" Style="{StaticResource ButtonAqua}" Click="ButtonOk" IsDefault="True"/>
                 <Button Content="Cancel" Style="{StaticResource ButtonLight}" Click="ButtonCancel"

@@ -20,17 +20,6 @@ namespace KeysLibrary.Services
 			}
 		}
 
-		// public static byte[] EncryptData(string dataToEncrypt, string publicKey)
-		// {
-		// 	using (var rsa = new RSACryptoServiceProvider(KeySize))
-		// 	{
-		// 		rsa.PersistKeyInCsp = false;
-		// 		rsa.FromXmlString(publicKey);
-		// 		var encryptedData = rsa.Encrypt(Encoding.UTF8.GetBytes(dataToEncrypt), true);
-		// 		return encryptedData;
-		// 	}
-		// }
-
 		public static byte[] Encrypt(AesInfo aesKey, RsaPublicKey rsaKey)
 		{
 			//! Ensure the RSA key and AES key are valid

@@ -7,7 +7,7 @@ namespace KeysLibrary.Models
         public string Modulus { get; set; }
         public string Exponent { get; set; }
         public string FilePath { get; set; }
-        public string FileName => Path.GetFileName(FilePath);
+        public string FileName => Path.GetFileNameWithoutExtension(FilePath);
 
         public RsaPublicKey(string modulus, string exponent, string filePath)
         {
@@ -16,9 +16,6 @@ namespace KeysLibrary.Models
             FilePath = filePath;
         }
 
-        public override string ToString()
-        {
-            return $"RSA Public: {FileName}";
-        }
+        public override string ToString() => FileName;
     }
 }

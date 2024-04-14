@@ -45,7 +45,7 @@ namespace EncryptieTool.Services
 
             //! Cancel if we're already on that page
             if (AlreadyThere(pageName)) return;
-
+            
             //> Navigate to the selected page
             MainFrame.Content = AppPages[pageName];
         }
@@ -70,6 +70,14 @@ namespace EncryptieTool.Services
         public static void RefreshPage()
         {
             MainFrame.NavigationService.Refresh();
+            
+            // // [Alternative], manual refresh
+            // string pageName = MainFrame.Content.GetType().Name;
+            // MainFrame.Content = null;
+            // MainFrame.Content = AppPages[pageName];
+            //
+            // // Remove previous page from history if it's the same as the current page
+            // MainFrame.RemoveBackEntry();
         }
 
         private static bool AlreadyThere(string pageName)

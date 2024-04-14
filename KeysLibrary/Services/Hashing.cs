@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Security.Cryptography;
-using System.IO;
+using System.Text;
 using Blake3_Arctium;
-using Arctium.Cryptography.HashFunctions.Hashes;
-using Arctium.Shared.Helpers.Buffers;
 
-namespace KeysLibrary
+namespace KeysLibrary.Services
 {
     public class Hashing
     {

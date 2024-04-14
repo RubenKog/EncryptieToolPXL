@@ -15,7 +15,7 @@ namespace KeysLibrary.Models
         public string DQ { get; set; } // D mod (q-1)
         public string InverseQ { get; set; } // (Inverse of q) mod p
         public string FilePath { get; set; }
-        public string FileName => Path.GetFileName(FilePath);
+        public string FileName => Path.GetFileNameWithoutExtension(FilePath);
 
         public RsaPrivateKey(string modulus, string exponent, string d, string p, string q, string dp, string dq, string inverseQ, string filePath)
         {
@@ -51,9 +51,6 @@ namespace KeysLibrary.Models
             }
         }
 
-        public override string ToString()
-        {
-            return $"RSA Private: {FileName}";
-        }
+        public override string ToString() => FileName;
     }
 }
