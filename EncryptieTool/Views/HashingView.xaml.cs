@@ -23,6 +23,7 @@ namespace EncryptieTool.Views
     /// </summary>
     public partial class HashingView : Page
     {
+        //FilePaths
         string File1;
         string File2;
         public string HashingAlgor { get; set; } = "SHA256";
@@ -41,84 +42,64 @@ namespace EncryptieTool.Views
                 StringBuilder sb = new StringBuilder();
                 byte[] HashedFile1;
                 byte[] HashedFile2;
-                if (HashingAlgor == "SHA256") 
+                string hashAlgorithm;
+                string hashString1;
+                string hashString2;
+
+                // Determine hash algorithm
+                if (HashingAlgor == "SHA256")
                 {
                     HashedFile1 = hashing.FileToHashSHA(File1);
                     HashedFile2 = hashing.FileToHashSHA(File2);
-                    string SHA256String1 = Convert.ToBase64String(HashedFile1);
-                    string SHA256String2 = Convert.ToBase64String(HashedFile2);
-
-                    sb.AppendLine("Checking integrity through SHA256 hash:");
-                    if (HashedFile1 == null || HashedFile2 == null)
-                    {
-                        MessageBox.Show("Please select two files.");
-                    }
-                    else if (HashedFile1 != null && HashedFile2 != null && SHA256String1 == SHA256String2)
-                    {
-                        sb.AppendLine("");
-                        sb.AppendLine($"File 1 hash: {SHA256String1}");
-                        sb.AppendLine("");
-                        sb.AppendLine($"File 2 hash: {SHA256String2}");
-                        sb.AppendLine("");
-                        sb.AppendLine("Integrity check complete: Success!");
-                        MessageBox.Show(sb.ToString(), "Integrity Checker");
-                    }
-                    else
-                    {
-                        sb.AppendLine("");
-                        sb.AppendLine($"File 1 hash: {SHA256String1}");
-                        sb.AppendLine("");
-                        sb.AppendLine($"File 2 hash: {SHA256String2}");
-                        sb.AppendLine("");
-                        sb.AppendLine("Integrity check complete: Failure!");
-                        MessageBox.Show(sb.ToString(), "Integrity Checker");
-                    }
-                    sb.Clear();
+                    hashAlgorithm = "SHA256";
                 }
                 else
                 {
                     HashedFile1 = hashing.FileToHashBLAKE(File1);
                     HashedFile2 = hashing.FileToHashBLAKE(File2);
-                    string BlakeString1 = Convert.ToBase64String(HashedFile1);
-                    string BlakeString2 = Convert.ToBase64String(HashedFile2);
-
-                    sb.AppendLine("Checking integrity through BLAKE hash:");
-                    if (HashedFile1 == null || HashedFile2 == null)
-                    {
-                        MessageBox.Show("Please select two files.");
-                    }
-                    else if (HashedFile1 != null && HashedFile2 != null && BlakeString1 == BlakeString2)
-                    {
-                        sb.AppendLine("");
-                        sb.AppendLine($"File 1 hash: {BlakeString1}");
-                        sb.AppendLine("");
-                        sb.AppendLine($"File 2 hash: {BlakeString2}");
-                        sb.AppendLine("");
-                        sb.AppendLine("Integrity check complete: Success!");
-                        MessageBox.Show(sb.ToString(), "Integrity Checker");
-                    }
-                    else
-                    {
-                        sb.AppendLine("");
-                        sb.AppendLine($"File 1 hash: {BlakeString1}");
-                        sb.AppendLine("");
-                        sb.AppendLine($"File 2 hash: {BlakeString2}");
-                        sb.AppendLine("");
-                        sb.AppendLine("Integrity check complete: Failure!");
-                        MessageBox.Show(sb.ToString(), "Integrity Checker");
-                    }
-                    sb.Clear();
+                    hashAlgorithm = "BLAKE";
                 }
 
+                // Check if files are selected
+                if (HashedFile1 == null || HashedFile2 == null)
+                {
+                    MessageBox.Show("Please select two files.");
+                    return;
+                }
 
+                // Convert hash bytes to strings
+                hashString1 = Convert.ToBase64String(HashedFile1);
+                hashString2 = Convert.ToBase64String(HashedFile2);
 
-                
+                sb.AppendLine($"Checking integrity through {hashAlgorithm} hash:");
+
+                // Compare hashes and display result
+                if (hashString1 == hashString2)
+                {
+                    sb.AppendLine("");
+                    sb.AppendLine($"File 1 hash: {hashString1}");
+                    sb.AppendLine("");
+                    sb.AppendLine($"File 2 hash: {hashString2}");
+                    sb.AppendLine("");
+                    sb.AppendLine("Integrity check complete: Success!");
+                }
+                else
+                {
+                    sb.AppendLine("");
+                    sb.AppendLine($"File 1 hash: {hashString1}");
+                    sb.AppendLine("");
+                    sb.AppendLine($"File 2 hash: {hashString2}");
+                    sb.AppendLine("");
+                    sb.AppendLine("Integrity check complete: Failure!");
+                }
+
+                MessageBox.Show(sb.ToString(), "Integrity Checker");
             }
             catch
             {
                 MessageBox.Show("Please select two files.");
             }
-           
+
 
         }
 
