@@ -157,7 +157,7 @@ namespace EncryptieTool.Views
                 byte[] encryptedAesKey = File.ReadAllBytes(encryptedAesKeyPath);
                 string decryptedAesKey = RsaService.DecryptData(encryptedAesKey, selectedPrivateKey.ToXmlString());
 
-                MessageBox.Show($"Decryption succesfull. Decryoted key: {decryptedAesKey}", "Decryption succesfull",
+                MessageBox.Show($"Decryption succesfull. Decrypted key: {decryptedAesKey}", "Decryption succesfull",
                     MessageBoxButton.OK, MessageBoxImage.Information);
 
                 string outputFilePath = Path.Combine(Directories.DecryptedCipherAesPath,
