@@ -24,6 +24,7 @@ namespace EncryptieTool.Windows
         {
             TxtAesPlain.Text = Directories.PlainAesPath;
             TxtAesCipher.Text = Directories.CipherAesPath;
+            TxtAesCipherDecrypted.Text = Directories.DecryptedCipherAesPath;
             TxtRsaPublic.Text = Directories.RsaPublicPath;
             TxtRsaPrivate.Text = Directories.RsaPrivatePath;
             TxtEncryptedImage.Text = Directories.EncryptedImgPath;
@@ -46,6 +47,9 @@ namespace EncryptieTool.Windows
                     break;
                 case "AesCipher":
                     System.Diagnostics.Process.Start("explorer.exe", Directories.CipherAesPath);
+                    break;
+                case "AesCipherDecrypted":
+                    System.Diagnostics.Process.Start("explorer.exe", Directories.DecryptedCipherAesPath);
                     break;
                 case "RsaPublic":
                     System.Diagnostics.Process.Start("explorer.exe", Directories.RsaPublicPath);
@@ -111,6 +115,9 @@ namespace EncryptieTool.Windows
                     break;
                 case "AesCipher":
                     Directories.CipherAesPath = path;
+                    break;
+                case "AesCipherDecrypted":
+                    Directories.DecryptedCipherAesPath = path;
                     break;
                 case "RsaPublic":
                     Directories.RsaPublicPath = path;

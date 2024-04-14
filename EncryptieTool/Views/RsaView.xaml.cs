@@ -1,23 +1,18 @@
-﻿using System;
-using KeysLibrary;
-using System.Collections.Generic;
+﻿using EncryptieTool.Windows;
+using KeysLibrary.Models;
+using KeysLibrary.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
-using EncryptieTool.Windows;
-using KeysLibrary.Models;
-using KeysLibrary.Services;
-using Path = System.IO.Path;
-using KeysLibrary.Services;
+using System.Xml.Linq;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Path = System.IO.Path;
 
 namespace EncryptieTool.Views
 {
@@ -32,6 +27,8 @@ namespace EncryptieTool.Views
 
         public ObservableCollection<AesInfo> PlainAesList = new ObservableCollection<AesInfo>();
         public ObservableCollection<RsaPublicKey> RsaPublicList = new ObservableCollection<RsaPublicKey>();
+        public ObservableCollection<RsaPrivateKey> RsaPrivateList = new ObservableCollection<RsaPrivateKey>();
+        public ObservableCollection<AesInfo> CipherAesList = new ObservableCollection<AesInfo>();
         private string _newKeyName = string.Empty;
         private string _cipherKeyName = string.Empty;
 
@@ -55,10 +52,12 @@ namespace EncryptieTool.Views
             LstPublicRsa.Items.Clear();
             PlainAesList.Clear();
             LstPlainAes.Items.Clear();
-            
+
             //Read
             ReadPlainAesKeys();
             ReadPublicRsa();
+            ReadPrivateRsaKeys();
+            ReadCipherAesKeys();
         }
 
         private void BtnUseRSA_Click(object sender, RoutedEventArgs e)
@@ -67,7 +66,7 @@ namespace EncryptieTool.Views
             {
                 InitialDirectory = @"C:\RSAPrivate",
                 Filter = "XML Files (*.xml)|*.xml",
-                Title = "Selecteer een Private RSA Sleutel"
+                Title = "Select a Private RSA Key"
             };
 
             if (openFileDialog.ShowDialog() == true)
@@ -81,7 +80,7 @@ namespace EncryptieTool.Views
 
                     if (selectedAesInfo == null)
                     {
-                        MessageBox.Show("Selecteer een geldige AES sleutel uit de lijst.", "Fout", MessageBoxButton.OK,
+                        MessageBox.Show("Select a valid AES key from the list", "Error", MessageBoxButton.OK,
                             MessageBoxImage.Error);
                         return;
                     }
@@ -90,7 +89,7 @@ namespace EncryptieTool.Views
                         Path.Combine(@"C:\RSAPublic", $"{selectedAesInfo.AesName}_EncryptedAESKey.txt");
                     if (!File.Exists(encryptedAesKeyPath))
                     {
-                        MessageBox.Show("Geëncrypteerde AES sleutelbestand niet gevonden.", "Fout", MessageBoxButton.OK,
+                        MessageBox.Show("Encrypted AES Key file not found", "Error", MessageBoxButton.OK,
                             MessageBoxImage.Error);
                         return;
                     }
@@ -102,8 +101,8 @@ namespace EncryptieTool.Views
                 }
                 catch (CryptographicException)
                 {
-                    MessageBox.Show("De gekozen RSA sleutel is niet correct of het bestand is beschadigd.",
-                        "Decryptie Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("The selected RSA Key is not correct or the file is damaged",
+                        "Decryption Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -113,15 +112,15 @@ namespace EncryptieTool.Views
             //! Check if an Aes and public rsa pair are selected
             if (LstPlainAes.SelectedItem == null || LstPublicRsa.SelectedItem == null)
             {
-                MessageBox.Show("Please select an Aes and Rsa key pair!", "Error", 
+                MessageBox.Show("Please select an Aes and Rsa key pair!", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            
+
             //? Check if the user has named the cipher key
             if (_cipherKeyName == string.Empty)
             {
-                MessageBox.Show("Please name the cipher key!", "Error", 
+                MessageBox.Show("Please name the cipher key!", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -134,14 +133,14 @@ namespace EncryptieTool.Views
             //! Check if keys are valid
             if (aesKey == null || rsaKey == null)
             {
-                MessageBox.Show("Please select a valid Aes and Rsa key pair!", "Error", 
+                MessageBox.Show("Please select a valid Aes and Rsa key pair!", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             //Encrypt the AES key
             var cipherAes = RsaService.Encrypt(aesKey, rsaKey);
-            
+
             //Save the encrypted AES key
             SaveCipherAes(cipherAes);
         }
@@ -151,7 +150,7 @@ namespace EncryptieTool.Views
             //Save the cipher
             Directories.EnsureDirectoriesExist();
             File.WriteAllBytes(Path.Combine(Directories.CipherAesPath, $"Cipher-{_cipherKeyName}.txt"), cipher);
-            
+
             //Display
             MessageBox.Show("AES key encrypted and saved!", "Success", MessageBoxButton.OK,
                 MessageBoxImage.Information);
@@ -214,32 +213,101 @@ namespace EncryptieTool.Views
         {
             //Prep
             RsaPublicList.Clear();
-            
+
             //Ensure directory exists
             Directories.EnsureDirectoriesExist();
-            
+
             //Read all XML files and determine whether they are public keys
             var files = Directory.GetFiles(Directories.RsaPublicPath, "*.xml");
             foreach (var file in files)
             {
                 // Skip file if it is not a public key
                 if (!IsFilePublicKey(file)) continue;
-                
+
                 //Load XML document
                 XDocument doc = XDocument.Load(file);
-                
+
                 //Create new RSA public key model
                 var key = new RsaPublicKey(
                     doc.Element("RSAKeyValue")?.Element("Modulus")?.Value,
-                    doc.Element("RSAKeyValue")?.Element("Exponent")?.Value, 
+                    doc.Element("RSAKeyValue")?.Element("Exponent")?.Value,
                     file);
-                
+
                 // Add to list
                 RsaPublicList.Add(key);
                 LstPublicRsa.Items.Add(new ListBoxItem() { Content = key.FileName });
             }
         }
-        
+
+        private void ReadPrivateRsaKeys()
+        {
+            LstPrivateRsa.Items.Clear();
+
+            string rsaPrivatePath = Directories.RsaPrivatePath;
+            if (!Directory.Exists(rsaPrivatePath))
+            {
+                Console.WriteLine($"The directory for the RSA Private Key doesn't exist: {rsaPrivatePath}");
+                return;
+            }
+
+            var privateKeyFiles = Directory.GetFiles(rsaPrivatePath, "*.xml");
+
+            foreach (string file in privateKeyFiles)
+            {
+                try
+                {
+                    XDocument doc = XDocument.Load(file);
+                    var rsaKey = new RsaPrivateKey(
+                        modulus: doc.Root.Element("Modulus")?.Value,
+                        exponent: doc.Root.Element("Exponent")?.Value,
+                        d: doc.Root.Element("D")?.Value,
+                        p: doc.Root.Element("P")?.Value,
+                        q: doc.Root.Element("Q")?.Value,
+                        dp: doc.Root.Element("DP")?.Value,
+                        dq: doc.Root.Element("DQ")?.Value,
+                        inverseQ: doc.Root.Element("InverseQ")?.Value,
+                        filePath: file
+                    );
+
+                    if (rsaKey.Modulus != null && rsaKey.Exponent != null && rsaKey.D != null)
+                    {
+                        ListBoxItem item = new ListBoxItem();
+                        item.Content = rsaKey.FileName;
+                        item.Tag = rsaKey;
+                        LstPrivateRsa.Items.Add(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error with reading Private RSA Key from file: {file}: {ex.Message}");
+                }
+            }
+        }
+
+        private void ReadCipherAesKeys()
+        {
+            CipherAesList.Clear();
+            LstCipherAes.Items.Clear();
+
+            string path = Directories.CipherAesPath;
+            if (!Directory.Exists(path))
+            {
+                MessageBox.Show($"The directory for the Cipher AES doesn't exist: {path}");
+                return;
+            }
+
+            var cipherFiles = Directory.GetFiles(path, "*.txt");
+
+            foreach (var file in cipherFiles)
+            {
+                string aesName = Path.GetFileNameWithoutExtension(file);
+                var aesInfo = new AesInfo { AesName = aesName };
+                aesInfo.AesKey = File.ReadAllText(file);
+                CipherAesList.Add(aesInfo);
+                LstCipherAes.Items.Add(new ListBoxItem { Content = aesInfo });
+            }
+        }
+
         /// <summary>
         /// Does a basic check, based on xml element names, to determine whether a file is a public RSA key.
         /// </summary>
@@ -266,19 +334,19 @@ namespace EncryptieTool.Views
         {
             // Get name of sender
             string name = ((TextBlock)sender).Name;
-            
+
             // Get user input
             string input = GetUserInput();
 
             //! Return if cancelled
             if (input == "@CANCEL@") return;
 
-            // Assign 
+            // Assign
             if (name.Contains("NewKey"))
                 _newKeyName = input;
             else if (name.Contains("CipherAes"))
                 _cipherKeyName = input;
-            
+
             // Refresh
             RefreshGui();
         }
@@ -317,7 +385,30 @@ namespace EncryptieTool.Views
 
         private void ButtonDecrypt(object sender, RoutedEventArgs e)
         {
-            
+            if (LstCipherAes.SelectedItem == null || LstPrivateRsa.SelectedItem == null)
+            {
+                MessageBox.Show("Select the correct Cipher AES Key and correct Private RSA Key", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
+                var selectedCipherAes = (AesInfo)((ListBoxItem)LstCipherAes.SelectedItem).Content;
+                var selectedPrivateKey = (RsaPrivateKey)((ListBoxItem)LstPrivateRsa.SelectedItem).Tag;
+
+                string encryptedAesKeyPath = Path.Combine(Directories.CipherAesPath, $"{selectedCipherAes.AesName}.txt");
+                byte[] encryptedAesKey = File.ReadAllBytes(encryptedAesKeyPath);
+                string decryptedAesKey = RsaService.DecryptData(encryptedAesKey, selectedPrivateKey.ToXmlString());
+
+                MessageBox.Show($"Decryption succesfull. Decryoted key: {decryptedAesKey}", "Decryption succesfull", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                string outputFilePath = Path.Combine(Directories.DecryptedCipherAesPath, $"{selectedCipherAes.AesName}_Decrypted.txt");
+                File.WriteAllText(outputFilePath, decryptedAesKey);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred during the decryption process: {ex.Message}", "Decryption Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

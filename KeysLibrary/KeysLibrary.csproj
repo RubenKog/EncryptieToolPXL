@@ -57,6 +57,7 @@
     <Compile Include="EncryptedImgInfo.cs" />
     <Compile Include="Hashing.cs" />
     <Compile Include="Models\AesInfo.cs" />
+    <Compile Include="Models\RsaPrivateKey.cs" />
     <Compile Include="Models\RsaPublicKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Directories.cs" />

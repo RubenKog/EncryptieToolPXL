@@ -34,6 +34,12 @@ namespace KeysLibrary.Services
             = Path.Combine(RootFolderPath, "Aes_Encrypted");
 
         /// <summary>
+        /// Folder where the (decrypted cipher text) AES keys are stored.
+        /// </summary>
+        public static string DecryptedCipherAesPath
+            = Path.Combine(RootFolderPath, "Aes_Decrypted");
+
+        /// <summary>
         /// Folder where the encrypted files are stored.
         /// </summary>
         public static string EncryptedImgPath
@@ -88,6 +94,7 @@ namespace KeysLibrary.Services
             //Get the paths from the settings
             PlainAesPath = settings.Element("Paths")?.Element("PlainAesPath")?.Value;
             CipherAesPath = settings.Element("Paths")?.Element("CipherAesPath")?.Value;
+            DecryptedCipherAesPath = settings.Element("Paths")?.Element("DecryptedCipherAesPath")?.Value;
             EncryptedImgPath = settings.Element("Paths")?.Element("EncryptedImgPath")?.Value;
             DecryptedImgPath = settings.Element("Paths")?.Element("DecryptedImgPath")?.Value;
             RsaPublicPath = settings.Element("Paths")?.Element("RsaPublicPath")?.Value;
@@ -112,6 +119,7 @@ namespace KeysLibrary.Services
             //Check if all the paths are present
             return settings.Element("Paths")?.Element("PlainAesPath") != null &&
                    settings.Element("Paths")?.Element("CipherAesPath") != null &&
+                   settings.Element("Paths")?.Element("DecryptedCipherAesPath") != null &&
                    settings.Element("Paths")?.Element("EncryptedImgPath") != null &&
                    settings.Element("Paths")?.Element("DecryptedImgPath") != null &&
                    settings.Element("Paths")?.Element("RsaPublicPath") != null &&
@@ -129,6 +137,7 @@ namespace KeysLibrary.Services
                 new XElement("Paths",
                     new XElement("PlainAesPath", PlainAesPath),
                     new XElement("CipherAesPath", CipherAesPath),
+                    new XElement("DecryptedCipherAesPath", DecryptedCipherAesPath),
                     new XElement("EncryptedImgPath", EncryptedImgPath),
                     new XElement("DecryptedImgPath", DecryptedImgPath),
                     new XElement("RsaPublicPath", RsaPublicPath),
@@ -157,6 +166,7 @@ namespace KeysLibrary.Services
             //AES folders
             Directory.CreateDirectory(PlainAesPath);
             Directory.CreateDirectory(CipherAesPath);
+            Directory.CreateDirectory(DecryptedCipherAesPath);
             
             //RSA folders
             Directory.CreateDirectory(RsaPrivatePath);
@@ -171,6 +181,7 @@ namespace KeysLibrary.Services
             //Reset the paths to the default paths
             PlainAesPath = Path.Combine(RootFolderPath, "Aes_Keys");
             CipherAesPath = Path.Combine(RootFolderPath, "Aes_Encrypted");
+            DecryptedCipherAesPath = Path.Combine(RootFolderPath, "Aes_Decrypted");
             EncryptedImgPath = Path.Combine(RootFolderPath, "Images_Encrypted");
             DecryptedImgPath = Path.Combine(RootFolderPath, "Images_Decrypted");
             RsaPrivatePath = Path.Combine(RootFolderPath, "RSA_Private");

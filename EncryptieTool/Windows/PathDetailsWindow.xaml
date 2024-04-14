@@ -70,6 +70,19 @@
                         </StackPanel>
                     </Border>
                 </DockPanel>
+                <DockPanel>
+                    <Button Style="{StaticResource ButtonLight}" Margin="0 4 4 4" Width="50" MinWidth="0"
+                            DockPanel.Dock="Right" Tag="AesCipherDecrypted" Click="ButtonNewClick">
+                        <Image Source="../Images/Icons/new.png" />
+                    </Button>
+                    <Border Style="{StaticResource DetailContainer}" MouseUp="OpenPathInExplorer" Tag="AesCipherDecrypted"
+                            Cursor="Hand">
+                        <StackPanel MaxHeight="100">
+                            <TextBlock Text="AES (Cipher Decrypted):" FontWeight="Bold" />
+                            <TextBlock x:Name="TxtAesCipherDecrypted" Text="Documents/users/Keyz" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
 
                 <!-- Rsa -->
                 <DockPanel>
