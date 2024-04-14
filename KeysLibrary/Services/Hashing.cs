@@ -7,7 +7,7 @@ namespace KeysLibrary.Services
 {
     public class Hashing
     {
-
+        //Get SHA256 hash from file, return it as bytearray
         public byte[] FileToHashSHA(string filePath)
         {
             if (File.Exists(filePath))
@@ -33,6 +33,7 @@ namespace KeysLibrary.Services
             }
             return null;
         }
+        //Get BLAKE3 hash from file, return it as bytearray
         //documentation -> https://github.com/NeuroXiq/Arctium
         public byte[] FileToHashBLAKE(string filePath)
         {

@@ -102,18 +102,19 @@ namespace EncryptieTool.Views
 
 
         }
-
+        //Select File 1
         private void BtnSelectFile1_Click(object sender, RoutedEventArgs e)
         {
             File1 = GetFilePath();
             TxtPlainImgName1.Text = File1;
         }
+        //Select File 2
         private void BtnSelectFile2_Click(object sender, RoutedEventArgs e)
         {
             File2 = GetFilePath();
             TxtPlainImgName2.Text = File2;
         }
-
+        //Get filepath with openfiledialogue
         private string GetFilePath()
         {
             var openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -135,10 +136,11 @@ namespace EncryptieTool.Views
                 return null;
             }
         }
-
+        //Change hashing algorithm
         private void CBHashingAG_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             HashingAlgor = ((ComboBoxItem)CBHashingAG.SelectedItem).Content.ToString();
+            //Warn user regarding the use of blake
             if(HashingAlgor != "SHA256")
             {
                 StringBuilder sb = new StringBuilder();
