@@ -72,24 +72,19 @@ namespace EncryptieTool.Views
                 hashString2 = Convert.ToBase64String(HashedFile2);
 
                 sb.AppendLine($"Checking integrity through {hashAlgorithm} hash:");
-
+                sb.AppendLine("");
+                sb.AppendLine($"File 1 hash: {hashString1}");
+                sb.AppendLine("");
+                sb.AppendLine($"File 2 hash: {hashString2}");
+                sb.AppendLine("");
                 // Compare hashes and display result
                 if (hashString1 == hashString2)
                 {
-                    sb.AppendLine("");
-                    sb.AppendLine($"File 1 hash: {hashString1}");
-                    sb.AppendLine("");
-                    sb.AppendLine($"File 2 hash: {hashString2}");
-                    sb.AppendLine("");
+                    
                     sb.AppendLine("Integrity check complete: Success!");
                 }
                 else
-                {
-                    sb.AppendLine("");
-                    sb.AppendLine($"File 1 hash: {hashString1}");
-                    sb.AppendLine("");
-                    sb.AppendLine($"File 2 hash: {hashString2}");
-                    sb.AppendLine("");
+                {                    
                     sb.AppendLine("Integrity check complete: Failure!");
                 }
 
